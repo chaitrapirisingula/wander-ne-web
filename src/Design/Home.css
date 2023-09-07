@@ -1,0 +1,45 @@
+.Home {
+    text-align: center;
+    padding-bottom: 5%;
+    font-family: Arial;
+}
+
+.home_image {
+    width: 100%;
+    height: 30rem;
+    object-fit: cover;
+}
+
+.head_text {
+    position: relative;
+    color: white;
+    text-shadow: 2px 2px gray;
+}
+
+.title {
+    font-size: 5rem;
+}
+    
+.center_text {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Oswald';
+}
+
+.home_overview {
+    text-align: left;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.content {
+    margin-top: 0.5rem;
+    transition: 0.3s;
+}
+
+.content:hover {
+    transform: scaleY(1.2);
+    transform-origin: bottom;
+}

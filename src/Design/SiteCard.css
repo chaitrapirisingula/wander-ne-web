@@ -1,0 +1,38 @@
+.card,
+.Metro,
+.SouthEast,
+.SouthWest,
+.SouthCentral,
+.NorthEast, 
+.Sandhills,
+.Panhandle {
+    display: flex;
+}
+
+.Metro {
+    box-shadow: 0 2px 10px grey;
+}
+
+.SouthEast {
+    box-shadow: 0 2px 10px green;
+}
+
+.SouthWest {
+    box-shadow: 0 2px 10px coral;
+}
+
+.SouthCentral {
+    box-shadow: 0 2px 10px purple;
+}
+
+.NorthEast {
+    box-shadow: 0 2px 10px blue;
+}
+
+.Sandhills {
+    box-shadow: 0 2px 10px orange;
+}
+
+.Panhandle {
+    box-shadow: 0 2px 10px brown;
+}
