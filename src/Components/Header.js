@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
-import MapIcon from '@mui/icons-material/Map';
+import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import SignpostIcon from '@mui/icons-material/Signpost';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { Box, Button } from '@mui/material';
 import WanderLogo from "../Images/WanderNebraskaLogo.png";
 import "../Design/HeaderFooter.css";
@@ -18,21 +18,21 @@ function Header( { mobileView } ) {
                 <img src={WanderLogo} alt="Wander Nebraska" className="logo" onClick={() => {navigate("/"); window.scrollTo(0, 0);}}/>
             </div>
             <div className="buttons_section">
-                <Button onClick={() => {navigate("/libraries"); window.scrollTo(0, 0);}}>
-                    <Box display="grid" justifyContent="center"><MenuBookIcon /></Box>
-                    Libraries
-                </Button>
                 <Button onClick={() => {navigate("/sites"); window.scrollTo(0, 0);}}>
-                    <Box display="grid" justifyContent="center"><HistoryEduIcon /></Box>
+                    <Box display="grid" justifyContent="center"><TravelExploreIcon /></Box>
                     Sites
                 </Button>
                 <Button onClick={() => {navigate("/map"); window.scrollTo(0, 0);}}>
-                    <Box display="grid" justifyContent="center"><MapIcon /></Box>
+                    <Box display="grid" justifyContent="center"><SignpostIcon /></Box>
                     Regions
                 </Button>
                 <Button onClick={() => {navigate("/events"); window.scrollTo(0, 0);}}>
                     <Box display="grid" justifyContent="center"><CalendarMonthIcon /></Box>
                     Events
+                </Button>
+                <Button onClick={() => {navigate("/profile"); window.scrollTo(0, 0);}}>
+                    <Box display="grid" justifyContent="center"><SupervisedUserCircleIcon /></Box>
+                    Profile
                 </Button>
             </div>
         </header>

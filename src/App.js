@@ -9,13 +9,14 @@ import { theme } from './Data/Palette';
 import Home from './Pages/Home';
 import Sites from './Pages/Sites';
 import Site from './Pages/Site';
-import Libraries from './Pages/Libraries';
 import Map from './Pages/Map';
 import Events from './Pages/Events';
 import ErrorPage from './Pages/ErrorPage';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Loading from './Components/Loading';
+import Login from './Pages/Login';
+import SiteProfile from './Pages/SiteProfile';
 import './Design/App.css';
 
 function App() {
@@ -81,9 +82,10 @@ function App() {
           <Route path="/" element={<Home sites={sites} mobileView={mobileView} links={links}/>} />
           <Route path="/sites" element={<Sites sites={sites} />} />
           <Route path="/sites/:site" element={<Site sites={sites} mobileView={mobileView} />} />
-          <Route path="/libraries" element={<Libraries sites={sites} />} />
           <Route path="/map" element={<Map sites={sites} mobileView={mobileView} />} />
           <Route path="/events" element={<Events sites={sites} mobileView={mobileView} />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<SiteProfile />} />
           <Route path='*' element={<ErrorPage />} />
         </Routes>
         : <></>}

@@ -27,8 +27,7 @@ function Sites( { sites } ) {
       </div>
       <div className="sites_wrapper">
         {sites.map((site) => {
-            return (!site.name.toLowerCase().includes("library")) 
-            && (site.name.toLowerCase().includes(searchQuery.toLowerCase()) || site.city.toLowerCase().includes(searchQuery.toLowerCase()))
+            return (site.name.toLowerCase().includes(searchQuery.toLowerCase()) || site.city.toLowerCase().includes(searchQuery.toLowerCase()))
             ? <SiteCard key={site.name} props={site} /> : ""
         })} 
       </div>

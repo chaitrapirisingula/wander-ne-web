@@ -6,7 +6,6 @@ import { logEvent } from 'firebase/analytics';
 import { collection, getDocs } from 'firebase/firestore';
 import { db, analytics } from '../Data/firebase';
 import Loading from '../Components/Loading';
-import LineImageList from '../Components/LineImageList';
 import ImageTable from '../Components/ImageTable';
 import InterestCard from '../Components/InterestCard';
 import HomePageImage from '../Images/HomePageImage.png';
@@ -72,9 +71,6 @@ function Home( { sites, mobileView, links } ) {
                 <Typography variant="h6">{information.about}</Typography>
               </Box>
             </Card>
-          </Box>
-          <Box padding={1}>
-            <LineImageList mobileView={mobileView} />
           </Box>
           <Box padding={1}>
             <Card>
