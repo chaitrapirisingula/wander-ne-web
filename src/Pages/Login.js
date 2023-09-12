@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Alert, Box, Button, TextField, Typography } from '@mui/material';
 import { auth, logInWithEmailAndPassword } from '../Data/firebase';
@@ -22,6 +23,10 @@ export default function Login() {
 
     return (
         <Box display="grid" justifyContent="center">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Profile</title>
+            </Helmet>
             {error ? <Alert severity='error'>An error occurred!</Alert> : ''}
             <Box padding={5} display="grid" justifyContent="center" gap={2}>
                 <Typography variant='h3' textAlign="center">Login</Typography>

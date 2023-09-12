@@ -29,7 +29,7 @@ export default function AlertModal( { title, description, handleClick } ) {
                 </DialogContent>
                 <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleClick} autoFocus>{title}</Button>
+                <Button color='error' onClick={handleClick} autoFocus>{title}</Button>
                 </DialogActions>
             </Dialog>
         </div>

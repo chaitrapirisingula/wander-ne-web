@@ -28,7 +28,7 @@ function App() {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
 
-  const mql = window.matchMedia('(max-width: 900px)');
+  const mql = window.matchMedia('(max-width: 750px)');
   mql.addEventListener('change', (e) => {
       setMobileView(e.matches);
   });
@@ -85,7 +85,7 @@ function App() {
           <Route path="/map" element={<Map sites={sites} mobileView={mobileView} />} />
           <Route path="/events" element={<Events sites={sites} mobileView={mobileView} />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<SiteProfile />} />
+          <Route path="/profile" element={<SiteProfile mobileView={mobileView} />} />
           <Route path='*' element={<ErrorPage />} />
         </Routes>
         : <></>}
