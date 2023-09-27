@@ -5,7 +5,7 @@ import { logEvent } from 'firebase/analytics';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { Box, Typography } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import { theme } from './Data/Palette';
+import { theme } from './Data/Constants';
 import Home from './Pages/Home';
 import Sites from './Pages/Sites';
 import Site from './Pages/Site';
