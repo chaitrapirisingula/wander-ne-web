@@ -3,11 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { query, collection, getDoc, getDocs, where } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { Box, Alert, Stack, Typography, Link } from '@mui/material';
+import { Box, Button, Alert, Stack, Typography, Link } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import { auth, db, logout } from '../Data/firebase';
-import { days } from '../Data/Constants';
 import AlertModal from '../Components/AlertModal';
 import Loading from '../Components/Loading';
+import WanderNebraskaLogo from '../Images/WanderNebraskaLogo.png';
+import AddressCard from '../Components/AddressCard';
+import HoursCard from '../Components/HoursCard';
+import '../Design/Site.css';
+import EventsList from '../Components/EventsList';
 
 export default function SiteProfile( { mobileView } ) {
 
@@ -56,65 +61,40 @@ export default function SiteProfile( { mobileView } ) {
             </Helmet>
             {error ? <Alert severity='error'>An error occurred!</Alert> : <></>}
             {infoLoading ? <Loading /> : 
-            <Box display="grid" justifyContent="center" padding={2}>
+            <Box display="grid" justifyContent="center">
                 <Stack>
+                    <img className="site_image" src={site.image || WanderNebraskaLogo} alt={site.name}></img>
                     <Box display="grid" justifyContent="center">
                         <Typography variant='h2' textAlign="center">{site.name}</Typography>
                     </Box>
                     <Box display="grid" justifyContent="center">
                         <Typography variant='h5'>{user.email}</Typography>
                     </Box>
-                    <Box display="grid" justifyContent="center">
+                    <Box display="flex" justifyContent="center" gap={2}>
                         <AlertModal title={'Logout'} 
                         description={'Are you sure you want to logout?'} 
                         handleClick={logout}/>
+                        <Button sx={{ fontSize: 18 }} startIcon={<EditIcon sx={{ width: 22, height: 22 }}/>} 
+                        onClick={() => navigate('/profile/edit')}>Edit</Button> 
                     </Box>
                 </Stack>
-                <Box>
-                    <Typography component='div' variant='h5'>
-                        <Box display='inline' sx={{ fontWeight: 'bold' }}>Address: </Box>
-                        {site.streetAddress + ', ' + site.city + ' ' + site.state + ', ' + site.zipCode}
-                    </Typography>
-                    <Typography component='div' variant='h5'>
-                        <Box display='inline' sx={{ fontWeight: 'bold' }}>Hours: </Box>
-                        {site.hours.map((times, i) => 
-                            <Typography variant='h6' key={i}>{days[i] + ': ' + times}</Typography>
-                        )}
-                    </Typography>
-                    <Typography component='div' variant='h5'>
+                <Box padding={2}>
+                    <Stack direction={mobileView ? 'column' : 'row'} gap={2} justifyContent='center'>
+                        <AddressCard currSite={site} mobileView={mobileView} />
+                        <Box display="grid" justifyContent="center">
+                            <HoursCard currSite={site} mobileView={mobileView}/>
+                        </Box>
+                    </Stack>
+                    <br/>
+                    <Typography component='div' variant='h5' sx={{ bgcolor: 'background.paper' }} padding={2}>
                         <Box display='inline' sx={{ fontWeight: 'bold' }}>Description: </Box>
                         {site.description}
-                    </Typography>
-                    {events ? 
-                    <Typography component='div' variant='h5'>
-                        <Box display='inline' sx={{ fontWeight: 'bold' }}>Events: </Box>
-                        {events.map((event) => 
-                            <Typography variant='h6' key={event.id}>
-                                {event.name}
-                                {event.description}
-                                {event.date.toDate().toDateString()}
-                            </Typography>
-                        )}
-                    </Typography>: <></>}
-                    {site.phone ? 
-                    <Typography component='div' variant='h5'>
-                        <Box display='inline' sx={{ fontWeight: 'bold' }}>Phone: </Box>
-                        {site.phone}
-                    </Typography> : <></>}
-                    {site.socialMedia ?
-                    <Typography component='div' variant='h5'>
-                        <Box display='inline' sx={{ fontWeight: 'bold' }}>Social Media: </Box>
-                        <Link href={site.website} target="_blank" rel="noreferrer">{site.socialMedia}</Link>
-                    </Typography> : <></>}
-                    {site.website ?
-                    <Typography component='div' variant='h5'>
-                        <Box display='inline' sx={{ fontWeight: 'bold' }}>Website: </Box>
-                        <Link href={site.website} target="_blank" rel="noreferrer">{site.website}</Link>
-                    </Typography> : <></>}
-                    <Typography component='div' variant='h5'>
+                        <br/><br/>
                         <Box display='inline' sx={{ fontWeight: 'bold' }}>Category: </Box>
                         {site.type}
                     </Typography>
+                    <br/>
+                    {events ? <EventsList events={events} /> : <></>}
                 </Box>
             </Box>}
         </div>
