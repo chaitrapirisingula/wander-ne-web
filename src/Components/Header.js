@@ -1,10 +1,9 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
+import { Box, Button } from '@mui/material';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import SignpostIcon from '@mui/icons-material/Signpost';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
-import { Box, Button } from '@mui/material';
 import WanderLogo from "../Images/WanderNebraskaLogo.png";
 import "../Design/HeaderFooter.css";
 
@@ -29,10 +28,6 @@ function Header( { mobileView } ) {
                 <Button onClick={() => {navigate("/events"); window.scrollTo(0, 0);}}>
                     <Box display="grid" justifyContent="center"><CalendarMonthIcon /></Box>
                     Events
-                </Button>
-                <Button onClick={() => {navigate("/profile"); window.scrollTo(0, 0);}}>
-                    <Box display="grid" justifyContent="center"><SupervisedUserCircleIcon /></Box>
-                    Profile
                 </Button>
             </div>
         </header>

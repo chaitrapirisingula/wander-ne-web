@@ -12,11 +12,10 @@ import Site from './Pages/Site';
 import Map from './Pages/Map';
 import Events from './Pages/Events';
 import ErrorPage from './Pages/ErrorPage';
+import SiteProfile from './Pages/SiteProfile';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Loading from './Components/Loading';
-import Login from './Pages/Login';
-import SiteProfile from './Pages/SiteProfile';
 import './Design/App.css';
 
 function App() {
@@ -84,8 +83,7 @@ function App() {
           <Route path="/sites/:site" element={<Site sites={sites} mobileView={mobileView} />} />
           <Route path="/map" element={<Map sites={sites} mobileView={mobileView} />} />
           <Route path="/events" element={<Events sites={sites} mobileView={mobileView} />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<SiteProfile mobileView={mobileView} />} />
+          <Route path="/test" element={<SiteProfile mobileView={mobileView} />} />
           <Route path='*' element={<ErrorPage />} />
         </Routes>
         : <></>}
