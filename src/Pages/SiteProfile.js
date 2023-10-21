@@ -55,27 +55,22 @@ export default function SiteProfile( { mobileView } ) {
             </Helmet>
             {loading ? <Loading /> : 
             <Box display="grid" justifyContent="center">
-                <Stack>
-                    <img className="site_image" src={site.image || WanderNebraskaLogo} alt={site.name}></img>
-                    <Box display="grid" justifyContent="center">
-                        <Typography variant='h2' textAlign="center">{site.name}</Typography>
-                    </Box>
-                </Stack>
-                <Box padding={2}>
+                <Box display="grid" justifyContent="center">
+                    <Typography variant='h2' textAlign="center">{site.name}</Typography>
+                </Box>
+                <Box display='grid' padding={2}>
                     <Stack direction={mobileView ? 'column' : 'row'} gap={2} justifyContent='center'>
+                        <Box padding={1}>
+                            <img src={site.image || WanderNebraskaLogo} alt={site.name} width={mobileView ? 400 : 600} height={400}></img>
+                        </Box>
                         <AddressCard currSite={site} mobileView={mobileView} />
-                        <Box display="grid" justifyContent="center">
+                    </Stack>
+                    <Stack direction={mobileView ? 'column' : 'row'} gap={2} justifyContent='center'>
+                        <Box padding={1}>
                             <HoursCard currSite={site} mobileView={mobileView}/>
                         </Box>
+                        <Typography variant='h5'>{site.description}</Typography>
                     </Stack>
-                    <br/>
-                    <Typography component='div' variant='h5' sx={{ bgcolor: 'background.paper' }} padding={2}>
-                        <Box display='inline' sx={{ fontWeight: 'bold' }}>Description: </Box>
-                        {site.description}
-                        <br/><br/>
-                        <Box display='inline' sx={{ fontWeight: 'bold' }}>Category: </Box>
-                        {site.type}
-                    </Typography>
                     <br/>
                     {events ? <EventsList events={events} /> : <></>}
                 </Box>
