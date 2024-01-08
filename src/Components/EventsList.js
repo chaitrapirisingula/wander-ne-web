@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Typography, List, ListItem, ListItemText, ListSubheader, ListItemIcon } from '@mui/material';
+import { Box, Typography, List, ListItem, ListItemText, ListSubheader, ListItemIcon } from '@mui/material';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 
 export default function EventsList( { events } ) {
@@ -7,35 +7,37 @@ export default function EventsList( { events } ) {
     <List sx={{ bgcolor: 'background.paper' }} 
         subheader={
             <ListSubheader component="div" id="nested-list-subheader">
-                <Typography variant="h4" color="text.primary">Events</Typography>
+                <Typography variant="h4" color="text.primary" textAlign="center" padding={1}>Events</Typography>
             </ListSubheader>
         }>
-        {events.map((event, i) => 
-            <ListItem alignItems="flex-start" key={i}>
-                <ListItemIcon>
-                    <DateRangeIcon />
-                </ListItemIcon>
-                <ListItemText
-                primary={event.name}
-                secondary={
-                    <React.Fragment>
-                        <Typography
-                            variant="body2"
-                            color="text.primary"
-                        >
-                            {event.date.toDate().toDateString()}
-                        </Typography>
-                        <Typography
-                            variant="body2"
-                            color="text.secondary"
-                        >
-                            {event.description}
-                        </Typography>
-                    </React.Fragment>
-                }
-                />
-            </ListItem>
-        )}
+        <Box padding={1}>
+            {events.map((event, i) => 
+                <ListItem alignItems="flex-start" key={i}>
+                    <ListItemIcon>
+                        <DateRangeIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                    primary={event.name}
+                    secondary={
+                        <React.Fragment>
+                            <Typography
+                                variant="body2"
+                                color="text.primary"
+                            >
+                                {event.date.toDate().toDateString()}
+                            </Typography>
+                            <Typography
+                                variant="body2"
+                                color="text.secondary"
+                            >
+                                {event.description}
+                            </Typography>
+                        </React.Fragment>
+                    }
+                    />
+                </ListItem>
+            )}
+        </Box>
     </List>
   );
 }

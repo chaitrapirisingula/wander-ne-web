@@ -58,28 +58,27 @@ export default function SiteProfile( { mobileView } ) {
             </Helmet>
             {loading ? <Loading /> : 
             <div>
-                {/* TODO: use tabs for overview (hours, description), events, map/others in region, similar sites */}
                 <img className="site_image" src={site.image || WanderNebraskaLogo} alt={site.name}></img>
-                {/* site title card starts */}
                 <Box display="grid" alignItems="center" justifyContent="center" textAlign="center" padding={2}>
                     <Card sx={{ maxWidth: 1100 }}>
-                    <Box display="grid" alignItems="center" justifyContent="center" textAlign="center" padding={5}>
-                        <Typography gutterBottom variant="h2" component="div">{site.name}</Typography>
-                        <Box display="grid" justifyContent="center" padding={2}>
-                        <Stack direction={mobileView ? 'column' : 'row'} spacing={3}>
-                            {site.email ? <a className="site_link" href={'mailto:'+site.email} target="_blank" rel="noreferrer"><EmailIcon fontSize="large"/>{site.email}</a> : <></>}
-                            {site.phone ? <div className="site_link"><PhoneIcon fontSize="large"/>{site.phone}</div> : <></>}
-                            {site.website ? <a className="site_link" href={site.website} target="_blank" rel="noreferrer"><LanguageIcon fontSize="large"/>Website</a> : <></>}
-                        </Stack>
+                        <Box display="grid" alignItems="center" justifyContent="center" textAlign="center" padding={5}>
+                            <Typography gutterBottom variant="h2" component="div">{site.name}</Typography>
+                            <Box display="grid" justifyContent="center" padding={2}>
+                                <Stack direction={mobileView ? 'column' : 'row'} spacing={3}>
+                                    {site.email ? <a className="site_link" href={'mailto:'+site.email} target="_blank" rel="noreferrer"><EmailIcon fontSize="large"/>{site.email}</a> : <></>}
+                                    {site.phone ? <div className="site_link"><PhoneIcon fontSize="large"/>{site.phone}</div> : <></>}
+                                    {site.website ? <a className="site_link" href={site.website} target="_blank" rel="noreferrer"><LanguageIcon fontSize="large"/>Website</a> : <></>}
+                                </Stack>
+                            </Box>
                         </Box>
-                    </Box>
                     </Card>
                 </Box>
-                {/* site title card ends */}
-                <Stack direction={mobileView ? 'column' : 'row'} gap={2} justifyContent='center'>
-                    <HoursCard currSite={site} mobileView={mobileView} />
-                    {/* site description card starts */}
-                    <Box padding={1}>
+                <Stack direction='column' gap={2} padding={2} paddingBottom={5}>
+                    <Stack direction={mobileView ? 'column' : 'row'} gap={2} justifyContent='center'>
+                        <HoursCard currSite={site} mobileView={mobileView} />
+                        <AddressCard currSite={site} mobileView={mobileView}/>
+                    </Stack>
+                    <Stack direction={mobileView ? 'column' : 'row'} gap={2} justifyContent='center'>
                         <Card sx={{ maxWidth: mobileView ? 300 : 800 }}>
                             <CardContent>
                                 <Box display='grid' justifyContent='center' textAlign='center' padding={1}>
@@ -87,14 +86,14 @@ export default function SiteProfile( { mobileView } ) {
                                 </Box>
                             </CardContent>
                         </Card>
-                    </Box>
-                    {/* site description card ends */}
+                        <br/>
+                        {events ? 
+                        <Card sx={{ maxWidth: mobileView ? 300 : 500 }}>
+                            <EventsList events={events} /> 
+                        </Card>
+                        : <></>}
+                    </Stack>
                 </Stack>
-                <Box padding={5}>
-                    {events ? <EventsList events={events} /> : <></>}
-                    <br/>
-                    <AddressCard currSite={site} mobileView={mobileView}/>
-                </Box>
             </div>}
         </div>
     );
