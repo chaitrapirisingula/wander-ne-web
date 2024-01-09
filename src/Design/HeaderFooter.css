@@ -2,7 +2,6 @@
 .header, 
 .header-mobile, 
 .footer-mobile {
-    background-color: #fbf4cd;
     width: 100%;
     display: grid;
     text-align: center;

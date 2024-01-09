@@ -5,7 +5,7 @@ import ImageItem from './ImageItem';
 function ImageTable( { items, note, title, mobileView } ) {
 
     return (
-        <ImageList sx={{ height: 400 }} cols={mobileView ? 2 : 4}>
+        <ImageList sx={{ height: 500 }} cols={mobileView ? 2 : 4}>
             <ImageListItem key="Subheader" cols={4}>
                 <ListSubheader component="div">{title}</ListSubheader>
             </ImageListItem>
