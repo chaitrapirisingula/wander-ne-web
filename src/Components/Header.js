@@ -1,13 +1,13 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { Box, Button } from '@mui/material';
+import { Box, Button, Link } from '@mui/material';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import SignpostIcon from '@mui/icons-material/Signpost';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import InfoIcon from '@mui/icons-material/Info';
 import WanderLogo from "../Images/WanderNebraskaLogo.png";
 import "../Design/HeaderFooter.css";
 
-function Header( { mobileView } ) {
+function Header( { mobileView, links } ) {
 
     let navigate = useNavigate();
 
@@ -25,9 +25,11 @@ function Header( { mobileView } ) {
                     <Box display="grid" justifyContent="center"><SignpostIcon /></Box>
                     Regions
                 </Button>
-                <Button onClick={() => {navigate("/events"); window.scrollTo(0, 0);}}>
-                    <Box display="grid" justifyContent="center"><CalendarMonthIcon /></Box>
-                    Events
+                <Button>
+                    <Link href={links.donation} target="_blank" rel="noreferrer" style={{ textDecoration: 'none' }}>
+                        <Box display="grid" justifyContent="center"><InfoIcon /></Box>
+                        Donate
+                    </Link>
                 </Button>
             </div>
         </header>

@@ -22,7 +22,7 @@ function Sites( { sites } ) {
           <title>Sites</title>
       </Helmet>
       <div className="sites_title">
-        <Typography variant="h2">Historical Sites</Typography>
+        <Typography variant="h2">Attractions</Typography>
         <SearchBar setSearchQuery={setSearchQuery} />
       </div>
       <div className="sites_wrapper">

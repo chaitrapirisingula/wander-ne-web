@@ -48,6 +48,4 @@
   grid-template-columns: repeat(auto-fit, minmax(12rem, 30rem));
   justify-content: space-between;
   padding: 1rem;
-  padding-left: 5%;
-  padding-right: 5%;
 }

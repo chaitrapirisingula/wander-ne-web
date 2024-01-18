@@ -69,7 +69,7 @@ function App() {
     <Router>
       <div className="background-image"></div>   
       <ThemeProvider theme={theme}>
-        <Header mobileView={mobileView}/>
+        <Header mobileView={mobileView} links={linksLoaded ? links : {}}/>
         {error ? 
           <Box padding={5} display="grid" justifyContent="center">
             <Typography variant='h4'>An error occured. Please try again later.</Typography>
