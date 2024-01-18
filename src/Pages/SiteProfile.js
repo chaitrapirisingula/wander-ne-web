@@ -24,7 +24,7 @@ export default function SiteProfile( { mobileView } ) {
 
     const fetchSiteInfo = async () => {
         try {
-            const q = query(collection(db, 'test_sites'), where('name', '==', name));
+            const q = query(collection(db, '2024_sites'), where('name', '==', name));
             const querySnaphot = await getDocs(q);
             const doc = querySnaphot.docs[0];
             const data = {id: doc.id, ...doc.data()};
