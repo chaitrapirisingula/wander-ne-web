@@ -13,6 +13,7 @@ import WanderNebraskaLogo from '../Images/WanderNebraskaLogo.png';
 import AddressCard from '../Components/AddressCard';
 import HoursCard from '../Components/HoursCard';
 import EventsList from '../Components/EventsList';
+import Slideshow from '../Components/Slideshow';
 import ErrorPage from './ErrorPage';
 import '../Design/Site.css';
 
@@ -25,17 +26,20 @@ export default function SiteProfile( { sites, mobileView } ) {
     const location = useLocation();
     let routeParams = useParams();
 
-    const fetchEventsInfo = async () => {
+    const fetchSiteInfo = async (data) => {
         try {
-            let events = [];
-            console.log(site);
-            site.events_ref.forEach(async (doc) => {
-                let event = await getDoc(doc);
-                if (event.exists()) {
-                    events.push({id: event.id, ...event.data()});
-                    setEvents(events);
-                }
-            });
+            setSite(data);
+            console.log(data.name);
+            if (data.events_ref) {
+                let events = [];
+                data.events_ref.forEach(async (doc) => {
+                    let event = await getDoc(doc);
+                    if (event.exists()) {
+                        events.push({id: event.id, ...event.data()});
+                        setEvents(events);
+                    }
+                });
+            }
         } catch (err) {
             console.error(err);
             alert('An error occured while fetching site data');
@@ -46,12 +50,10 @@ export default function SiteProfile( { sites, mobileView } ) {
 
     useEffect(() => {
         if (location.state) {
-            setSite(location.state);
-            // TODO: fix fetchEventsInfo();
+            fetchSiteInfo(location.state);
             setLoading(false);
         } else {
-            setSite(sites.find((site) => { return site.name === routeParams.site }));
-            // TODO: fix fetchEventsInfo();
+            fetchSiteInfo(sites.find((s) => { return s.name === routeParams.site }));
             setLoading(false);
         }
         logEvent(analytics, `${routeParams.site}_visit`);
