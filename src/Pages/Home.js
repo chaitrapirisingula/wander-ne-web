@@ -104,7 +104,7 @@ function Home( { sites, mobileView, links } ) {
             </Card>
           </Box>
           <Box padding={1} textAlign="center">
-            <ImageTable items={sites.filter(site => site.special)} note={true} title={"Past Statewide Grants Recipients"} mobileView={mobileView}/>
+            <ImageTable items={sites.filter(site => site.note)} show_note={true} title={"Past Statewide Grants Recipients"} mobileView={mobileView}/>
           </Box>
         </div>
       </div> : <></>}

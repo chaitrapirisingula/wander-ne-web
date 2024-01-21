@@ -36,7 +36,7 @@ function App() {
   useEffect(() => {
     const getSites = async () => {
       try {
-        const sitesRef = collection(db, "sites");
+        const sitesRef = collection(db, "2024_sites");
         const data = await getDocs(query(sitesRef, orderBy("name")));
         const sitesData = data.docs.map((doc) => ({...doc.data(), id: doc.id }));
         setSites(sitesData);
@@ -80,10 +80,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home sites={sites} mobileView={mobileView} links={links}/>} />
           <Route path="/sites" element={<Sites sites={sites} />} />
-          <Route path="/sites/:site" element={<Site sites={sites} mobileView={mobileView} />} />
+          <Route path="/sites/:site" element={<SiteProfile sites={sites} mobileView={mobileView} />} />
           <Route path="/map" element={<Map sites={sites} mobileView={mobileView} />} />
-          <Route path="/events" element={<Events sites={sites} mobileView={mobileView} />} />
-          <Route path="/test" element={<SiteProfile mobileView={mobileView} />} />
           <Route path='*' element={<ErrorPage />} />
         </Routes>
         : <></>}

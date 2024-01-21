@@ -1,42 +1,41 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { query, collection, getDoc, getDocs, where } from 'firebase/firestore';
+import { getDoc } from 'firebase/firestore';
 import { Box, Card, CardContent, Stack, Typography, } from '@mui/material';
+import { logEvent } from 'firebase/analytics';
+import { analytics } from '../Data/firebase';
 import EmailIcon from '@mui/icons-material/Email';
 import LanguageIcon from '@mui/icons-material/Language';
 import PhoneIcon from '@mui/icons-material/Phone';
-import { db } from '../Data/firebase';
 import Loading from '../Components/Loading';
 import WanderNebraskaLogo from '../Images/WanderNebraskaLogo.png';
 import AddressCard from '../Components/AddressCard';
 import HoursCard from '../Components/HoursCard';
 import EventsList from '../Components/EventsList';
+import ErrorPage from './ErrorPage';
 import '../Design/Site.css';
 
-export default function SiteProfile( { mobileView } ) {
+export default function SiteProfile( { sites, mobileView } ) {
 
     const [loading, setLoading] = useState(true);
     const [site, setSite] = useState({});
     const [events, setEvents] = useState([]);
 
-    // query name from params
-    const name = 'Walk to the Rock';
+    const location = useLocation();
+    let routeParams = useParams();
 
-    const fetchSiteInfo = async () => {
+    const fetchEventsInfo = async () => {
         try {
-            const q = query(collection(db, '2024_sites'), where('name', '==', name));
-            const querySnaphot = await getDocs(q);
-            const doc = querySnaphot.docs[0];
-            const data = {id: doc.id, ...doc.data()};
             let events = [];
-            data.events_ref.forEach(async (doc) => {
+            console.log(site);
+            site.events_ref.forEach(async (doc) => {
                 let event = await getDoc(doc);
                 if (event.exists()) {
                     events.push({id: event.id, ...event.data()});
                     setEvents(events);
                 }
             });
-            setSite(data);
         } catch (err) {
             console.error(err);
             alert('An error occured while fetching site data');
@@ -46,9 +45,27 @@ export default function SiteProfile( { mobileView } ) {
     };
 
     useEffect(() => {
-        setLoading(true);
-        fetchSiteInfo();
-    }, []);
+        if (location.state) {
+            setSite(location.state);
+            // TODO: fix fetchEventsInfo();
+            setLoading(false);
+        } else {
+            setSite(sites.find((site) => { return site.name === routeParams.site }));
+            // TODO: fix fetchEventsInfo();
+            setLoading(false);
+        }
+        logEvent(analytics, `${routeParams.site}_visit`);
+    }, [location.state, routeParams.site, sites])
+
+    if (!site && !loading) {
+        return (
+            <ErrorPage />
+        );
+    } else if (loading) {
+        return (
+            <Loading />
+        );
+    } else {
   
     return (
         <div className='profile'>
@@ -79,7 +96,7 @@ export default function SiteProfile( { mobileView } ) {
                         <AddressCard currSite={site} mobileView={mobileView}/>
                     </Stack>
                     <Stack direction={mobileView ? 'column' : 'row'} gap={2} justifyContent='center'>
-                        <Card sx={{ maxWidth: mobileView ? 300 : 800 }}>
+                        <Card sx={{ maxWidth: mobileView ? 350 : 800 }}>
                             <CardContent>
                                 <Box display='grid' justifyContent='center' textAlign='center' padding={1}>
                                     <Typography variant='h5'>{site.description}</Typography>
@@ -87,8 +104,8 @@ export default function SiteProfile( { mobileView } ) {
                             </CardContent>
                         </Card>
                         <br/>
-                        {events ? 
-                        <Card sx={{ maxWidth: mobileView ? 300 : 500 }}>
+                        {events.length > 0 ? 
+                        <Card sx={{ maxWidth: mobileView ? 350 : 500 }}>
                             <EventsList events={events} /> 
                         </Card>
                         : <></>}
@@ -97,4 +114,6 @@ export default function SiteProfile( { mobileView } ) {
             </div>}
         </div>
     );
+};
+
 };

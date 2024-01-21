@@ -16,7 +16,7 @@ import Loading from '../Components/Loading';
 import ErrorPage from './ErrorPage';
 import '../Design/Site.css';
 
-function Site( { sites, mobileView} ) {
+function Site( { sites, mobileView } ) {
 
   const [currSite, setCurrSite] = useState({});
   const [loading, setLoading] = useState(true);
