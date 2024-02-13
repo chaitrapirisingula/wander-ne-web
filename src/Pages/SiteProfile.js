@@ -98,13 +98,14 @@ export default function SiteProfile( { sites, mobileView } ) {
                         <AddressCard currSite={site} mobileView={mobileView}/>
                     </Stack>
                     <Stack direction={mobileView ? 'column' : 'row'} gap={2} justifyContent='center'>
+                        {site.description ?
                         <Card sx={{ maxWidth: mobileView ? 350 : 800 }}>
                             <CardContent>
                                 <Box display='grid' justifyContent='center' textAlign='center' padding={1}>
                                     <Typography variant='h5'>{site.description}</Typography>
                                 </Box>
                             </CardContent>
-                        </Card>
+                        </Card> : <></>}
                         <br/>
                         {events.length > 0 ? 
                         <Card sx={{ maxWidth: mobileView ? 350 : 500 }}>
