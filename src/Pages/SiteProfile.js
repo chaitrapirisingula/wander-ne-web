@@ -13,8 +13,8 @@ import WanderNebraskaLogo from '../Images/WanderNebraskaLogo.png';
 import AddressCard from '../Components/AddressCard';
 import HoursCard from '../Components/HoursCard';
 import EventsList from '../Components/EventsList';
-import Slideshow from '../Components/Slideshow';
 import ErrorPage from './ErrorPage';
+import Slideshow from '../Components/Slideshow';
 import '../Design/Site.css';
 
 export default function SiteProfile( { sites, mobileView } ) {
@@ -73,29 +73,40 @@ export default function SiteProfile( { sites, mobileView } ) {
         <div className='profile'>
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>Profile</title>
+                <title>{routeParams.site}</title>
             </Helmet>
             {loading ? <Loading /> : 
             <div>
                 <img className="site_image" src={site.image || WanderNebraskaLogo} alt={site.name}></img>
                 <Box display="grid" alignItems="center" justifyContent="center" textAlign="center" padding={2}>
-                    <Card sx={{ maxWidth: 1100 }}>
-                        <Box display="grid" alignItems="center" justifyContent="center" textAlign="center" padding={5}>
-                            <Typography gutterBottom variant="h2" component="div">{site.name}</Typography>
-                            <Box display="grid" justifyContent="center" padding={2}>
-                                <Stack direction={mobileView ? 'column' : 'row'} spacing={3}>
-                                    {site.email ? <a className="site_link" href={'mailto:'+site.email} target="_blank" rel="noreferrer"><EmailIcon fontSize="large"/>{site.email}</a> : <></>}
-                                    {site.phone ? <div className="site_link"><PhoneIcon fontSize="large"/>{site.phone}</div> : <></>}
-                                    {site.website ? <a className="site_link" href={site.website} target="_blank" rel="noreferrer"><LanguageIcon fontSize="large"/>Website</a> : <></>}
-                                </Stack>
+                    <Stack direction={mobileView ? 'column' : 'row'} gap={2}>
+                        <Card sx={{ maxWidth: 900 }}>
+                            <Box display="grid" alignItems="center" justifyContent="center" textAlign="center" padding={5}>
+                                <Typography gutterBottom variant="h3" component="div">{site.name}</Typography>
+                                <Box display="grid" justifyContent="center" padding={2}>
+                                    <Stack direction={mobileView ? 'column' : 'row'} spacing={3}>
+                                        {site.email ? <a className="site_link" href={'mailto:'+site.email} target="_blank" rel="noreferrer"><EmailIcon fontSize="large"/>{site.email}</a> : <></>}
+                                        {site.phone ? <div className="site_link"><PhoneIcon fontSize="large"/>{site.phone}</div> : <></>}
+                                        {site.website ? <a className="site_link" href={site.website} target="_blank" rel="noreferrer"><LanguageIcon fontSize="large"/>Website</a> : <></>}
+                                    </Stack>
+                                </Box>
                             </Box>
-                        </Box>
-                    </Card>
+                        </Card>
+                        {mobileView ?
+                        <Box display='grid' alignItems='center' justifyContent='center' textAlign='center'>
+                            <HoursCard currSite={site} mobileView={mobileView} />
+                        </Box> : 
+                        <HoursCard currSite={site} mobileView={mobileView} />}
+                    </Stack>
                 </Box>
                 <Stack direction='column' gap={2} padding={2} paddingBottom={5}>
                     <Stack direction={mobileView ? 'column' : 'row'} gap={2} justifyContent='center'>
-                        <HoursCard currSite={site} mobileView={mobileView} />
                         <AddressCard currSite={site} mobileView={mobileView}/>
+                        {site.region ? 
+                        <Box display='grid' alignItems='center' justifyContent='center' textAlign='center'>
+                            <Slideshow slides={sites.filter(s => s.name !== site.name && s.region === site.region)} title={"More in the " + site.region + " region:"}/> 
+                        </Box>
+                        : <></>}
                     </Stack>
                     <Stack direction={mobileView ? 'column' : 'row'} gap={2} justifyContent='center'>
                         {site.description ?

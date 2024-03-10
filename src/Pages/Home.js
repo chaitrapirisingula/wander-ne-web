@@ -8,7 +8,6 @@ import { logEvent } from 'firebase/analytics';
 import { collection, getDocs } from 'firebase/firestore';
 import { db, analytics } from '../Data/firebase';
 import Loading from '../Components/Loading';
-import ImageTable from '../Components/ImageTable';
 import HomePageImage from '../Images/HomePageImage.png';
 import '../Design/App.css';
 import '../Design/Home.css';
@@ -102,9 +101,6 @@ function Home( { sites, mobileView, links } ) {
                 <Typography variant="h6">{information.support[2]}</Typography>
               </Box>
             </Card>
-          </Box>
-          <Box padding={1} textAlign="center">
-            <ImageTable items={sites.filter(site => site.note)} show_note={true} title={"Past Statewide Grants Recipients"} mobileView={mobileView}/>
           </Box>
         </div>
       </div> : <></>}

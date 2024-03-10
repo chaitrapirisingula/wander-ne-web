@@ -5,7 +5,7 @@ import "../Design/Site.css";
 function HoursCard( { currSite, mobileView } ) {
   
     return (
-        <Card sx={{ maxWidth: mobileView ? 350 : 300 }}>
+        <Card sx={{ maxWidth: mobileView ? 350 : 700 }}>
             <CardContent>
                 <Typography component='div' variant='h5'>
                     <Typography variant='h4' textAlign='center'>Hours</Typography>
