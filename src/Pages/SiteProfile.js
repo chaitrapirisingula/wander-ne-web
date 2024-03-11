@@ -30,9 +30,9 @@ export default function SiteProfile( { sites, mobileView } ) {
         try {
             setSite(data);
             console.log(data.name);
-            if (data.events_ref) {
+            if (data.events) {
                 let events = [];
-                data.events_ref.forEach(async (doc) => {
+                data.events.forEach(async (doc) => {
                     let event = await getDoc(doc);
                     if (event.exists()) {
                         events.push({id: event.id, ...event.data()});
