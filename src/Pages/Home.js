@@ -9,6 +9,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db, analytics } from '../Data/firebase';
 import Loading from '../Components/Loading';
 import HomePageImage from '../Images/HomePageImage.png';
+import PrizesImg from '../Images/2024_prizes.png';
 import '../Design/App.css';
 import '../Design/Home.css';
 import '@fontsource/oswald';
@@ -69,6 +70,18 @@ function Home( { sites, mobileView, links } ) {
               <Box padding={2}>
                 <Typography variant="h4">About</Typography>
                 <Typography variant="h6">{information.about}</Typography>
+              </Box>
+            </Card>
+          </Box>
+          <Box padding={1}>
+            <Card>
+              <Box padding={2}>
+                <Typography variant="h4">Prizes!</Typography>
+                <Typography variant="h6">{information.prizes[0]}</Typography>
+                <br/>
+                <Typography variant="h6">{information.prizes[1]}</Typography>
+                <img className="prizes_list" src={PrizesImg} alt="Prize List" width={mobileView ? 400 : 1000}></img>
+                <Typography variant="h6">{information.prizes[2]}</Typography>
               </Box>
             </Card>
           </Box>
