@@ -8,7 +8,7 @@ function AddressCard( { currSite, mobileView } ) {
         <Card sx={{ maxWidth: mobileView ? 400 : 700 }}>
             <CardContent>
                 <iframe title="map" className="site_map" src={`https://maps.google.com/maps?q=
-                ${currSite.name + " " + currSite.streetAddress + " " + currSite.city + " " + currSite.state + " " + currSite.zipCode} &t=&z=13&ie=UTF8&iwloc=&output=embed`} 
+                ${currSite.name + " " + currSite.address + " " + currSite.city + " " + currSite.state + " " + currSite.zipCode} &t=&z=13&ie=UTF8&iwloc=&output=embed`} 
                 width={ mobileView ? "300" : "600"} height="300"></iframe>
                 <Typography gutterBottom variant="h6" component="div" textAlign="center" padding={1} sx={{ fontStyle: 'italic' }}>
                 {currSite.address}, {currSite.city}, {currSite.state}, {currSite.zipCode}</Typography>

@@ -39,21 +39,21 @@ function App() {
         const sitesData = data.docs.map((doc) => ({...doc.data(), id: doc.id }));
         setSites(sitesData);
         setLoaded(true);
-        var formattedJSON = sitesData.map(item => {
-          return {
-            name : item.name,
-            region : item.region,
-            address : item.address,
-            city : item.city,
-            state : item.state,
-            zip : item.zipCode,
-            contact : item.contact,
-            phone : item.phone,
-            hours : item.hours.toString(),
-            email : item.email,
-            website : item.website
-          }
-        });
+        // var formattedJSON = sitesData.map(item => {
+        //   return {
+        //     name : item.name,
+        //     region : item.region,
+        //     address : item.address,
+        //     city : item.city,
+        //     state : item.state,
+        //     zip : item.zipCode,
+        //     contact : item.contact,
+        //     phone : item.phone,
+        //     hours : item.hours.toString(),
+        //     email : item.email,
+        //     website : item.website
+        //   }
+        // });
       } catch (err) {
         console.error(err);
         setError(true);

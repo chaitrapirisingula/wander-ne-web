@@ -11,7 +11,7 @@ function ImageTable( { items, show_note, title, mobileView } ) {
             </ImageListItem>
             {items.map((item, index) => (
                 <ImageItem key={index} item={item} message={item.note && show_note ? item.note 
-                    : item.streetAddress + ", " + item.city + " " + item.state + " " + item.zipCode}/>
+                    : item.address + ", " + item.city + " " + item.state + " " + item.zipCode}/>
             ))}
         </ImageList>
     );
