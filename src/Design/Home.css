@@ -6,25 +6,8 @@
 
 .home_image {
     width: 100%;
-    height: 30rem;
+    height: 32rem;
     object-fit: cover;
-}
-
-.head_text {
-    position: relative;
-    color: white;
-}
-
-.title {
-    font-size: 5rem;
-}
-    
-.center_text {
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Oswald';
 }
 
 .home_overview {

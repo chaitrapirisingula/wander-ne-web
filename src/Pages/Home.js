@@ -56,12 +56,6 @@ function Home( { sites, mobileView, links } ) {
           <div className = "head_image">
           <img src={HomePageImage} alt="Wander Nebraska" className="home_image"/>
           </div>
-          <div className="center_text">
-            <div className="title">
-              {mobileView ? <p>Wander Nebraska</p> : <p>WanderNebraska</p>}
-            </div>
-            <Typography variant="h5" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>{information.motto}</Typography>
-          </div>
         </div>
         <div className="home_overview">
           <br/>
@@ -80,8 +74,13 @@ function Home( { sites, mobileView, links } ) {
                 <Typography variant="h6">{information.prizes[0]}</Typography>
                 <br/>
                 <Typography variant="h6">{information.prizes[1]}</Typography>
-                <img className="prizes_list" src={PrizesImg} alt="Prize List" width={mobileView ? 400 : 1000}></img>
+                <Typography variant="h6">Go to <a href="https://www.nshsf.org/projects/wandernebraska-request-a-booklet/" target="_blank" rel="noreferrer">https://www.nshsf.org/projects/wandernebraska-request-a-booklet/</a></Typography>
+                <br/>
                 <Typography variant="h6">{information.prizes[2]}</Typography>
+                <Typography variant="h6">{information.prizes[3]}</Typography>
+                <Typography variant="h6">{information.prizes[4]}</Typography>
+                <img className="prizes_list" src={PrizesImg} alt="Prize List" width={mobileView ? 400 : 1000}></img>
+                <Typography variant="h6">{information.prizes[5]}</Typography>
               </Box>
             </Card>
           </Box>
