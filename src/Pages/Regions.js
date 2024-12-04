@@ -107,7 +107,7 @@ function Regions({ sites }) {
           <div className="flex flex-col gap-8">
             {/* Map */}
             <div className="flex justify-center">
-              <div className="w-full max-w-3xl">
+              <div className="w-full max-w-3xl overflow-scroll">
                 <ImageMapper
                   src={RegionsMap}
                   map={MAP}
