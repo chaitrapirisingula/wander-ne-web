@@ -1,22 +1,26 @@
 import React, { useEffect } from "react";
-import { Box, Typography } from "@mui/material";
-import { logEvent } from 'firebase/analytics';
-import { analytics } from '../Data/firebase';
-import "../Design/App.css";
+import { Helmet } from "react-helmet";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../Data/firebase";
 
 function ErrorPage() {
+  useEffect(() => {
+    logEvent(analytics, "404_visit");
+  }, []);
 
-    useEffect(() => {
-        logEvent(analytics, "404_visit");
-    }, []);
-
-    return (
-        <div className="App">
-            <Box padding={5}>
-                <Typography variant='h4'>404: Page Not Found.</Typography>
-            </Box>
-        </div>
-    );
+  return (
+    <div>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Not Found</title>
+      </Helmet>
+      <div className="min-h-screen bg-yellow-100 p-5">
+        <h4 className="text-2xl text-center font-semibold text-red-600">
+          404: Page Not Found.
+        </h4>
+      </div>
+    </div>
+  );
 }
 
 export default ErrorPage;
