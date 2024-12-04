@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import WanderNebraskaLogo from "../Images/WanderNebraskaLogo.png";
 
 function Header({ links }) {
   let navigate = useNavigate();
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -28,16 +29,37 @@ function Header({ links }) {
               navigate("/");
               window.scrollTo(0, 0);
             }}
-            className="cursor-pointer hover:text-yellow-400 transition duration-300"
+            className={
+              location.pathname === "/"
+                ? "cursor-pointer text-yellow-400"
+                : "cursor-pointer hover:text-yellow-400 transition duration-300"
+            }
           >
             About
+          </div>
+          <div
+            onClick={() => {
+              navigate("/explore");
+              window.scrollTo(0, 0);
+            }}
+            className={
+              location.pathname === "/explore"
+                ? "cursor-pointer text-yellow-400"
+                : "cursor-pointer hover:text-yellow-400 transition duration-300"
+            }
+          >
+            Explore
           </div>
           <div
             onClick={() => {
               navigate("/regions");
               window.scrollTo(0, 0);
             }}
-            className="cursor-pointer hover:text-yellow-400 transition duration-300"
+            className={
+              location.pathname === "/regions"
+                ? "cursor-pointer text-yellow-400"
+                : "cursor-pointer hover:text-yellow-400 transition duration-300"
+            }
           >
             Regions
           </div>
@@ -90,6 +112,16 @@ function Header({ links }) {
             className="cursor-pointer block py-2 px-4 hover:bg-blue-600 transition duration-300"
           >
             About
+          </div>
+          <div
+            onClick={() => {
+              navigate("/explore");
+              window.scrollTo(0, 0);
+              setIsOpen(false);
+            }}
+            className="cursor-pointer block py-2 px-4 hover:bg-blue-600 transition duration-300"
+          >
+            Explore
           </div>
           <div
             onClick={() => {
