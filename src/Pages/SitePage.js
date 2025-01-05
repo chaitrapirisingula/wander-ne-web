@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { logEvent } from "firebase/analytics";
-import { analytics } from "../Data/firebase";
+import { analytics } from "../Data/Firebase";
 import Loading from "../Components/Loading";
 import WanderNebraskaLogo from "../Images/WanderDefaultImage.png";
 import ErrorPage from "./ErrorPage";

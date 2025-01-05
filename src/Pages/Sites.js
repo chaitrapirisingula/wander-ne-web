@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { logEvent } from "firebase/analytics";
-import { analytics } from "../Data/firebase";
+import { analytics } from "../Data/Firebase";
 import SiteCard from "../Components/SiteCard";
 import SearchBar from "../Components/SearchBar";
 import { SITE_TAGS } from "../Data/Constants";

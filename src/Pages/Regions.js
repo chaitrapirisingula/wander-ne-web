@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import ImageMapper from "react-img-mapper";
 import { logEvent } from "firebase/analytics";
 import { collection, getDocs } from "firebase/firestore";
-import { db, analytics } from "../Data/firebase";
+import { db, analytics } from "../Data/Firebase";
 import RegionsMap from "../Images/RegionsMap.png";
 import WanderDefaultImg from "../Images/WanderDefaultImage.png";
 import Loading from "../Components/Loading";

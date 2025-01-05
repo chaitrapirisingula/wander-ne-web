@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { db, analytics } from "./Data/firebase";
+import { db, analytics } from "./Data/Firebase";
 import { logEvent } from "firebase/analytics";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import Home from "./Pages/Home";
