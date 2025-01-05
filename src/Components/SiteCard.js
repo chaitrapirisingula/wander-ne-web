@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import WanderDefaultImage from "../Images/WanderDefaultImage.png";
+import { SITE_TAGS } from "../Data/Constants";
 
 function SiteCard({ props }) {
   const [imgError, setImgError] = useState(false);
@@ -35,13 +36,33 @@ function SiteCard({ props }) {
         <p className="text-sm text-gray-600 mt-2 line-clamp-3 font-light">
           {props.description || "No description available."}
         </p>
+
+        {/* Feature Icons */}
+        {props.features && props.features.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-3">
+            {SITE_TAGS.filter((feature) =>
+              props.features.includes(feature.name)
+            ).map((feature, index) => (
+              <div
+                key={index}
+                className="bg-gray-200 p-2 rounded-md flex items-center justify-center text-blue-700 relative group"
+              >
+                <span className="group-hover:opacity-100 opacity-0 absolute bottom-full mb-1 bg-gray-700 text-white text-xs rounded py-1 px-2 transition-opacity">
+                  {feature.name}
+                </span>
+                {feature.icon}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Button */}
       <div className="flex justify-center py-3">
         <button
-          className="px-4 py-2 bg-blue-600 text-white font-medium text-sm rounded-lg hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all duration-300"
-          onClick={() => {
+          className="px-4 py-2 text-blue-600 font-medium hover:text-blue-500 transition-all duration-300"
+          onClick={(e) => {
+            e.stopPropagation(); // Prevents parent div click event
             navigate("/explore/" + props.name, { state: props });
             window.scrollTo(0, 0);
           }}
