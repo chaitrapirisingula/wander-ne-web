@@ -1,4 +1,31 @@
-export const MAP = {
+import {
+  FaBook,
+  FaLandmark,
+  FaTree,
+  FaWheelchair,
+  FaParking,
+  FaUtensils,
+  FaWifi,
+  FaUsers,
+  FaCampground,
+  FaPaw,
+} from "react-icons/fa";
+
+export const SITE_TAGS = [
+  { name: "Library", icon: <FaBook /> },
+  { name: "Museum", icon: <FaLandmark /> },
+  { name: "Natural Park", icon: <FaTree /> },
+  { name: "Wheelchair Accessible", icon: <FaWheelchair /> },
+  { name: "Pet-Friendly", icon: <FaPaw /> },
+  { name: "RV Parking", icon: <FaParking /> },
+  { name: "Picnic Area", icon: <FaCampground /> },
+  { name: "Large Group Friendly", icon: <FaUsers /> },
+  { name: "Native American Centric", icon: <FaLandmark /> },
+  { name: "Guest WiFi", icon: <FaWifi /> },
+  { name: "Restaurants Nearby", icon: <FaUtensils /> },
+];
+
+export const REGIONS_MAP = {
   name: "nebraska-regions",
   areas: [
     {

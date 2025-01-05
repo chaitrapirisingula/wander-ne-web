@@ -7,7 +7,7 @@ import Home from "./Pages/Home";
 import Sites from "./Pages/Sites";
 import Regions from "./Pages/Regions";
 import ErrorPage from "./Pages/ErrorPage";
-import SiteProfile from "./Pages/SiteProfile";
+import SitePage from "./Pages/SitePage";
 import Header from "./Components/Header";
 import Loading from "./Components/Loading";
 
@@ -77,10 +77,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home sites={sites} links={links} />} />
             <Route path="/explore" element={<Sites sites={sites} />} />
-            <Route
-              path="/explore/:site"
-              element={<SiteProfile sites={sites} />}
-            />
+            <Route path="/explore/:site" element={<SitePage sites={sites} />} />
             <Route path="/regions" element={<Regions sites={sites} />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>

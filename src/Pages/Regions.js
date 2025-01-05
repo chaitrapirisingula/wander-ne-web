@@ -7,7 +7,7 @@ import { db, analytics } from "../Data/firebase";
 import RegionsMap from "../Images/RegionsMap.png";
 import WanderDefaultImg from "../Images/WanderDefaultImage.png";
 import Loading from "../Components/Loading";
-import { MAP } from "../Data/MapInfo";
+import { REGIONS_MAP } from "../Data/Constants";
 import { useNavigate } from "react-router-dom";
 
 function SiteMiniCard({ site }) {
@@ -110,7 +110,7 @@ function Regions({ sites }) {
               <div className="w-full max-w-3xl overflow-scroll">
                 <ImageMapper
                   src={RegionsMap}
-                  map={MAP}
+                  map={REGIONS_MAP}
                   width={700}
                   height={300}
                   onClick={clicked}

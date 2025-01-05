@@ -6,8 +6,9 @@ import { analytics } from "../Data/firebase";
 import Loading from "../Components/Loading";
 import WanderNebraskaLogo from "../Images/WanderDefaultImage.png";
 import ErrorPage from "./ErrorPage";
+import { SITE_TAGS } from "../Data/Constants";
 
-export default function SiteProfile({ sites }) {
+export default function SitePage({ sites }) {
   const [loading, setLoading] = useState(true);
   const [site, setSite] = useState({});
   const [imgError, setImgError] = useState(false);
@@ -15,22 +16,17 @@ export default function SiteProfile({ sites }) {
   const location = useLocation();
   let routeParams = useParams();
 
-  const fetchSiteInfo = async (data) => {
+  useEffect(() => {
     try {
-      setSite(data);
+      if (location.state) {
+        setSite(location.state);
+      } else {
+        setSite(sites.find((s) => s.name === routeParams.site));
+      }
     } catch (err) {
       console.error(err);
-      alert("An error occurred while fetching site data");
     } finally {
       setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (location.state) {
-      fetchSiteInfo(location.state);
-    } else {
-      fetchSiteInfo(sites.find((s) => s.name === routeParams.site));
     }
     logEvent(analytics, `${routeParams.site}_visit`);
   }, [location.state, routeParams.site, sites]);
@@ -127,6 +123,28 @@ export default function SiteProfile({ sites }) {
           </div>
         </div>
 
+        {/* Features Section */}
+        {site.features && site.features.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-2xl font-semibold text-blue-700 text-center mb-4">
+              Features
+            </h2>
+            <div className="flex flex-wrap justify-center gap-4">
+              {SITE_TAGS.filter((feature) =>
+                site.features.includes(feature.name)
+              ).map((feature, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-2 bg-white shadow-md px-4 py-2 rounded-lg"
+                >
+                  {feature.icon}
+                  <span className="text-gray-700">{feature.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Description */}
         {site.description && (
           <div className="flex flex-col justify-center items-center mt-8 text-center">
@@ -144,18 +162,17 @@ export default function SiteProfile({ sites }) {
           </h2>
 
           <iframe
-            src={`https://maps.google.com/maps?q=
-                ${
-                  site.name +
-                  " " +
-                  site.address +
-                  " " +
-                  site.city +
-                  " " +
-                  site.state +
-                  " " +
-                  site.zipCode
-                } &t=&z=13&ie=UTF8&iwloc=&output=embed`}
+            src={`https://maps.google.com/maps?q=${
+              site.name +
+              " " +
+              site.address +
+              " " +
+              site.city +
+              " " +
+              site.state +
+              " " +
+              site.zipCode
+            }&t=&z=13&ie=UTF8&iwloc=&output=embed`}
             title="Google Maps"
             className="w-8/12 h-64 rounded-lg shadow-md"
             allowFullScreen
