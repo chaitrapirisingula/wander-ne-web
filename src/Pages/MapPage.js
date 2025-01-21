@@ -226,12 +226,12 @@ const SiteCard = ({ site, onClick }) => {
     >
       {/* Left: Site Details */}
       <div className="flex-1 p-2">
-        <h3 className="font-bold">{site.name}</h3>
-        <p className="text-sm text-gray-600">{`${site.address}, ${site.city}, ${site.state} ${site.zipCode}`}</p>
+        <h3 className="font-bold text-center md:text-left">{site.name}</h3>
+        <p className="hidden sm:flex text-sm text-gray-600 text-center md:text-left">{`${site.address}, ${site.city}, ${site.state} ${site.zipCode}`}</p>
       </div>
 
       {/* Right: Site Image */}
-      <div className="w-32 h-16 flex-shrink-0">
+      <div className="hidden sm:flex w-32 h-16 flex-shrink-0">
         <img
           src={!imgError && site.image ? site.image : WanderNebraskaLogo}
           alt={site.name}
