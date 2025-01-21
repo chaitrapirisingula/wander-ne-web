@@ -14,7 +14,7 @@ export default function SitePage({ sites }) {
   const [imgError, setImgError] = useState(false);
 
   const location = useLocation();
-  let routeParams = useParams();
+  const routeParams = useParams();
 
   useEffect(() => {
     try {

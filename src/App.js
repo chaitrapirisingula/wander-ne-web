@@ -10,6 +10,7 @@ import ErrorPage from "./Pages/ErrorPage";
 import SitePage from "./Pages/SitePage";
 import Header from "./Components/Header";
 import Loading from "./Components/Loading";
+import MapPage from "./Pages/MapPage";
 
 function App() {
   const [sites, setSites] = useState([]);
@@ -79,6 +80,7 @@ function App() {
             <Route path="/explore" element={<Sites sites={sites} />} />
             <Route path="/explore/:site" element={<SitePage sites={sites} />} />
             <Route path="/regions" element={<Regions sites={sites} />} />
+            <Route path="/map" element={<MapPage sites={sites} />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </div>

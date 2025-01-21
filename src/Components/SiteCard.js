@@ -5,7 +5,7 @@ import { SITE_TAGS } from "../Data/Constants";
 
 function SiteCard({ props }) {
   const [imgError, setImgError] = useState(false);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <div

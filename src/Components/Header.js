@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import WanderNebraskaLogo from "../Images/WanderNebraskaLogo.png";
 
 function Header({ links }) {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -62,6 +62,19 @@ function Header({ links }) {
             }
           >
             Regions
+          </div>
+          <div
+            onClick={() => {
+              navigate("/map");
+              window.scrollTo(0, 0);
+            }}
+            className={
+              location.pathname === "/map"
+                ? "cursor-pointer text-yellow-400"
+                : "cursor-pointer hover:text-yellow-400 transition duration-300"
+            }
+          >
+            Map
           </div>
           <a
             href={links.donation}
@@ -132,6 +145,16 @@ function Header({ links }) {
             className="cursor-pointer block py-2 px-4 hover:bg-blue-600 transition duration-300"
           >
             Regions
+          </div>
+          <div
+            onClick={() => {
+              navigate("/map");
+              window.scrollTo(0, 0);
+              setIsOpen(false);
+            }}
+            className="cursor-pointer block py-2 px-4 hover:bg-blue-600 transition duration-300"
+          >
+            Map
           </div>
           <a
             href={links.donation}

@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 
 function FeaturedSite({ site }) {
   const [imgError, setImgError] = useState(false);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <div
@@ -34,7 +34,7 @@ function FeaturedSite({ site }) {
 }
 
 function Home({ sites, links }) {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [siteOne, setSiteOne] = useState({});
   const [siteTwo, setSiteTwo] = useState({});
