@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { IoClose } from "react-icons/io5";
+import { IoClose } from "react-icons/io5"; // Import the close icon from react-icons
 import MapboxGL from "mapbox-gl";
 import WanderNebraskaLogo from "../Images/WanderDefaultImage.png";
 import SearchBar from "../Components/SearchBar";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const MapPage = ({ sites }) => {
-  const mapContainer = useRef(null); // Ref for map container
+  const mapContainer = useRef(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [geocodedSites, setGeocodedSites] = useState([]);
+  const [filteredSites, setFilteredSites] = useState([]);
   const [selectedSite, setSelectedSite] = useState(null);
   const [viewState, setViewState] = useState({
     latitude: 41.4925, // Default center in Nebraska
@@ -19,7 +20,7 @@ const MapPage = ({ sites }) => {
 
   const map = useRef(null);
 
-  // Initialize the map
+  // Initialize map & update view state when user moves map
   useEffect(() => {
     map.current = new MapboxGL.Map({
       container: mapContainer.current,
@@ -27,6 +28,15 @@ const MapPage = ({ sites }) => {
       center: [viewState.longitude, viewState.latitude],
       zoom: viewState.zoom,
       accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
+    });
+
+    map.current.on("moveend", () => {
+      const center = map.current.getCenter();
+      setViewState((prev) => ({
+        ...prev,
+        latitude: center.lat,
+        longitude: center.lng,
+      }));
     });
 
     // Clean up the map when the component unmounts
@@ -96,22 +106,57 @@ const MapPage = ({ sites }) => {
     geocodeAddresses();
   }, [sites]);
 
-  // Filter sites based on search query
-  const filteredSites = geocodedSites.filter((site) =>
-    site.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Function to calculate distance between two lat-lng coordinates (Haversine formula)
+  const calculateDistance = (lat1, lng1, lat2, lng2) => {
+    const R = 6371; // Earth radius in km
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLng = ((lng2 - lng1) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLng / 2) *
+        Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // Distance in km
+  };
+
+  // Filter and sort the sites based on the search query and distance to the view state
+  useEffect(() => {
+    if (!geocodedSites || geocodedSites.length === 0) return;
+
+    const filteredAndSortedSites = geocodedSites
+      .filter((site) =>
+        site.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      .sort((a, b) => {
+        const distanceA = calculateDistance(
+          viewState.latitude,
+          viewState.longitude,
+          a.coordinates.lat,
+          a.coordinates.lng
+        );
+        const distanceB = calculateDistance(
+          viewState.latitude,
+          viewState.longitude,
+          b.coordinates.lat,
+          b.coordinates.lng
+        );
+        return distanceA - distanceB;
+      });
+
+    setFilteredSites(filteredAndSortedSites);
+  }, [searchQuery, geocodedSites, viewState]); // Update when search query or view state changes
 
   // Add markers and handle popup interactions
   useEffect(() => {
     if (!map.current || filteredSites.length === 0) return;
 
-    // Add markers to the map
     filteredSites.forEach((site) => {
       const marker = new MapboxGL.Marker()
         .setLngLat([site.coordinates.lng, site.coordinates.lat])
         .addTo(map.current);
 
-      // Open popup on marker click
       marker.getElement().addEventListener("click", () => {
         setSelectedSite(site);
         map.current.flyTo({
