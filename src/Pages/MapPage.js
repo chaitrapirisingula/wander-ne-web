@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import Map, { Marker, Popup, NavigationControl } from "react-map-gl";
+import { IoClose } from "react-icons/io5"; // Import the close icon from react-icons
+import MapboxGL from "mapbox-gl";
 import WanderNebraskaLogo from "../Images/WanderDefaultImage.png";
 import SearchBar from "../Components/SearchBar";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const MapPage = ({ sites }) => {
+  const mapContainer = useRef(null); // Ref for map container
   const [searchQuery, setSearchQuery] = useState("");
   const [geocodedSites, setGeocodedSites] = useState([]);
-  const [sortedSites, setSortedSites] = useState([]);
   const [selectedSite, setSelectedSite] = useState(null);
   const [viewState, setViewState] = useState({
     latitude: 41.4925, // Default center in Nebraska
@@ -16,14 +17,35 @@ const MapPage = ({ sites }) => {
     zoom: 10,
   });
 
+  const map = useRef(null);
+
+  // Initialize the map
+  useEffect(() => {
+    map.current = new MapboxGL.Map({
+      container: mapContainer.current,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [viewState.longitude, viewState.latitude],
+      zoom: viewState.zoom,
+      accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
+    });
+
+    // Clean up the map when the component unmounts
+    return () => map.current.remove();
+  }, []);
+
   // Fetch user's location
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setViewState({
+        const newViewState = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
           zoom: 12,
+        };
+        setViewState(newViewState);
+        map.current.flyTo({
+          center: [newViewState.longitude, newViewState.latitude],
+          zoom: newViewState.zoom,
         });
       },
       (error) => console.error("Error fetching location: ", error),
@@ -74,115 +96,76 @@ const MapPage = ({ sites }) => {
     geocodeAddresses();
   }, [sites]);
 
-  // Sort and filter sites by proximity and search query
+  // Add markers and handle popup interactions
   useEffect(() => {
-    if (!viewState || geocodedSites.length === 0) return;
+    if (!map.current || geocodedSites.length === 0) return;
 
-    const calculateDistance = (lat1, lng1, lat2, lng2) => {
-      const toRadians = (deg) => (deg * Math.PI) / 180;
-      const R = 6371; // Radius of the Earth in kilometers
+    // Add markers to the map
+    geocodedSites.forEach((site) => {
+      const marker = new MapboxGL.Marker()
+        .setLngLat([site.coordinates.lng, site.coordinates.lat])
+        .addTo(map.current);
 
-      const dLat = toRadians(lat2 - lat1);
-      const dLng = toRadians(lng2 - lng1);
-      const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRadians(lat1)) *
-          Math.cos(toRadians(lat2)) *
-          Math.sin(dLng / 2) *
-          Math.sin(dLng / 2);
-
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      return R * c; // Distance in kilometers
-    };
-
-    const query = searchQuery.trim().toLowerCase();
-
-    const filteredAndSorted = geocodedSites
-      .filter(
-        (site) =>
-          site.name.toLowerCase().includes(query) ||
-          site.city.toLowerCase().includes(query)
-      )
-      .sort((a, b) => {
-        const distanceA = calculateDistance(
-          viewState.latitude,
-          viewState.longitude,
-          a.coordinates.lat,
-          a.coordinates.lng
-        );
-        const distanceB = calculateDistance(
-          viewState.latitude,
-          viewState.longitude,
-          b.coordinates.lat,
-          b.coordinates.lng
-        );
-        return distanceA - distanceB;
+      // Open popup on marker click
+      marker.getElement().addEventListener("click", () => {
+        setSelectedSite(site);
+        map.current.flyTo({
+          center: [site.coordinates.lng, site.coordinates.lat],
+          zoom: 12,
+        });
       });
-
-    setSortedSites(filteredAndSorted);
-  }, [viewState, geocodedSites, searchQuery]);
+    });
+  }, [geocodedSites]);
 
   return (
     <div className="relative h-screen w-screen">
-      <Map
-        {...viewState}
-        onMove={(e) => setViewState(e.viewState)}
-        style={{ width: "100%", height: "100%" }}
-        mapStyle="mapbox://styles/mapbox/streets-v11"
-        mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-      >
-        {/* Navigation Controls */}
-        <NavigationControl position="top-right" />
-
-        {/* Markers */}
-        {geocodedSites.map((site) => (
-          <Marker
-            key={site.id}
-            latitude={site.coordinates.lat}
-            longitude={site.coordinates.lng}
-            onClick={(e) => {
-              e.originalEvent.stopPropagation();
-              setSelectedSite(site);
-            }}
-          >
-            <div className="text-blue-500 text-2xl cursor-pointer">📍</div>
-          </Marker>
-        ))}
-
-        {/* Popup for selected site */}
-        {selectedSite && (
-          <Popup
-            latitude={selectedSite.coordinates.lat}
-            longitude={selectedSite.coordinates.lng}
-            onClose={() => setSelectedSite(null)}
-            closeOnClick={true}
-            closeButton={false}
-          >
-            <PopupCard site={selectedSite} />
-          </Popup>
-        )}
-      </Map>
-
+      <div ref={mapContainer} style={{ width: "100%", height: "100%" }} />
       {/* Site Cards */}
       <div className="absolute top-0 left-0 w-1/3 h-screen overflow-y-auto shadow-lg p-4">
         <div className="pb-4">
           <SearchBar setSearchQuery={setSearchQuery} />
         </div>
-        {sortedSites.map((site) => (
+        {geocodedSites.map((site) => (
           <SiteCard
             key={site.id}
             site={site}
             onClick={() => {
               setSelectedSite(site);
-              setViewState({
-                latitude: site.coordinates.lat,
-                longitude: site.coordinates.lng,
+              map.current.flyTo({
+                center: [site.coordinates.lng, site.coordinates.lat],
                 zoom: 12,
               });
             }}
           />
         ))}
       </div>
+
+      {/* Popup for selected site */}
+      {selectedSite && (
+        <div
+          className="absolute bg-white p-4 rounded-lg shadow-lg"
+          style={{
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 1000,
+            width: "300px",
+          }}
+        >
+          <div className="flex justify-between items-start">
+            {/* PopupCard on the left */}
+            <PopupCard site={selectedSite} />
+
+            {/* Close button on the right */}
+            <button
+              className="text-gray-500 hover:text-gray-700 text-xl"
+              onClick={() => setSelectedSite(null)} // Close popup
+            >
+              <IoClose />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
