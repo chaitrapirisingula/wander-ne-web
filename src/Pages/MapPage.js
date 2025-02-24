@@ -96,12 +96,17 @@ const MapPage = ({ sites }) => {
     geocodeAddresses();
   }, [sites]);
 
+  // Filter sites based on search query
+  const filteredSites = geocodedSites.filter((site) =>
+    site.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   // Add markers and handle popup interactions
   useEffect(() => {
-    if (!map.current || geocodedSites.length === 0) return;
+    if (!map.current || filteredSites.length === 0) return;
 
     // Add markers to the map
-    geocodedSites.forEach((site) => {
+    filteredSites.forEach((site) => {
       const marker = new MapboxGL.Marker()
         .setLngLat([site.coordinates.lng, site.coordinates.lat])
         .addTo(map.current);
@@ -115,7 +120,7 @@ const MapPage = ({ sites }) => {
         });
       });
     });
-  }, [geocodedSites]);
+  }, [filteredSites]);
 
   return (
     <div className="relative h-screen w-screen">
@@ -125,7 +130,7 @@ const MapPage = ({ sites }) => {
         <div className="pb-4">
           <SearchBar setSearchQuery={setSearchQuery} />
         </div>
-        {geocodedSites.map((site) => (
+        {filteredSites.map((site) => (
           <SiteCard
             key={site.id}
             site={site}
