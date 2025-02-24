@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { FaInfoCircle } from "react-icons/fa";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../Data/Firebase";
 import Loading from "../Components/Loading";
@@ -40,12 +41,26 @@ export default function SitePage({ sites }) {
   }
 
   return (
-    <div className="min-h-screen bg-yellow-100 py-8">
+    <div className="min-h-screen bg-yellow-100 ">
       <Helmet>
         <meta charSet="utf-8" />
         <title>{site.name}</title>
       </Helmet>
-      <div className="container mx-auto px-4">
+      <section className="bg-black bg-opacity-50 text-white">
+        <div className="container mx-auto px-4 py-4 text-center">
+          <div className="flex items-center justify-center gap-2">
+            <FaInfoCircle className="hidden lg:flex w-4 h-4 text-yellow-400" />
+            <p className="my-2">
+              The hours listed on this website are valid during the 2025
+              WanderNebraska season (May 1st to September 30th). For more
+              information on off-season hours, please reach out to the
+              respective sites directly.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div className="container mx-auto px-4 py-8">
         {/* Site Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-blue-700">{site.name}</h1>
@@ -114,7 +129,7 @@ export default function SitePage({ sites }) {
               <div>
                 <h2 className="text-xl font-semibold text-blue-600">Hours</h2>
                 <ul className="list-disc list-inside text-gray-700">
-                  {site.hours.map((hour, index) => (
+                  {site.hours.split(",").map((hour, index) => (
                     <li key={index}>{hour}</li>
                   ))}
                 </ul>

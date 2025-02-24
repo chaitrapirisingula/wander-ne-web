@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { db, analytics } from "./Data/Firebase";
+import { db, sites_db, analytics } from "./Data/Firebase";
 import { logEvent } from "firebase/analytics";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
+import { ref, get } from "firebase/database";
 import Home from "./Pages/Home";
 import Sites from "./Pages/Sites";
-import Regions from "./Pages/Regions";
 import ErrorPage from "./Pages/ErrorPage";
 import SitePage from "./Pages/SitePage";
 import Header from "./Components/Header";
@@ -23,20 +23,29 @@ function App() {
   useEffect(() => {
     const getSites = async () => {
       try {
-        const sitesRef = collection(db, "2024_sites");
-        const data = await getDocs(query(sitesRef, orderBy("name")));
-        const sitesData = data.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        setSites(sitesData);
-        setLoaded(true);
+        const sitesRef = ref(sites_db, "2025_sites");
+        const snapshot = await get(sitesRef);
+        if (snapshot.exists()) {
+          const sitesData = [];
+          snapshot.forEach((childSnapshot) => {
+            sitesData.push({
+              ...childSnapshot.val(),
+              id: childSnapshot.key,
+            });
+          });
+          sitesData.sort((a, b) => a.name.localeCompare(b.name));
+          setSites(sitesData);
+          setLoaded(true);
+        } else {
+          console.log("No data available");
+        }
       } catch (err) {
         console.error(err);
         setError(true);
         logEvent(analytics, "error_fetching_sites");
       }
     };
+
     const getLinks = async () => {
       try {
         const linksRef = collection(db, "links");
@@ -50,6 +59,7 @@ function App() {
         logEvent(analytics, "error_fetching_links");
       }
     };
+
     getSites();
     getLinks();
   }, []);
@@ -79,7 +89,6 @@ function App() {
             <Route path="/" element={<Home sites={sites} links={links} />} />
             <Route path="/explore" element={<Sites sites={sites} />} />
             <Route path="/explore/:site" element={<SitePage sites={sites} />} />
-            <Route path="/regions" element={<Regions sites={sites} />} />
             <Route path="/map" element={<MapPage sites={sites} />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>

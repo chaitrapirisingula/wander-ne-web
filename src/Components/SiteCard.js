@@ -33,9 +33,6 @@ function SiteCard({ props }) {
         <p className="text-gray-500 mt-1">
           {props.city}, {props.state}
         </p>
-        <p className="text-sm text-gray-600 mt-2 line-clamp-3 font-light">
-          {props.description || "No description available."}
-        </p>
 
         {/* Feature Icons */}
         {props.features && props.features.length > 0 && (
@@ -55,20 +52,6 @@ function SiteCard({ props }) {
             ))}
           </div>
         )}
-      </div>
-
-      {/* Button */}
-      <div className="flex justify-center py-3">
-        <button
-          className="px-4 py-2 text-blue-600 font-medium hover:text-blue-500 transition-all duration-300"
-          onClick={(e) => {
-            e.stopPropagation(); // Prevents parent div click event
-            navigate("/explore/" + props.name, { state: props });
-            window.scrollTo(0, 0);
-          }}
-        >
-          Learn More
-        </button>
       </div>
     </div>
   );

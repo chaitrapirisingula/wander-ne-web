@@ -1,5 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet";
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 import LocationsBg from "../Images/MapBG.png";
 import ChimneyRock from "../Images/ChimneyRock.png";
 import WanderDefaultImage from "../Images/WanderDefaultImage.png";
@@ -118,7 +119,7 @@ function Home({ sites, links }) {
             </p>
             <button
               onClick={() => {
-                navigate("/regions");
+                navigate("/map");
                 window.scrollTo(0, 0);
               }}
               className="mt-6 px-6 py-3 text-lg font-bold bg-gradient-to-r from-blue-500 via-blue-400 to-blue-300 hover:from-blue-400 hover:to-blue-500 text-white rounded-lg shadow-lg hover:scale-105 transform transition duration-300"
@@ -128,7 +129,6 @@ function Home({ sites, links }) {
           </div>
         </div>
       </section>
-
       {/* Footer */}
       <footer className="flex flex-col justify-center items-center py-8">
         <a href={links.nshsf_website} target="_blank" rel="noreferrer">
@@ -146,7 +146,7 @@ function Home({ sites, links }) {
               className="hover:text-yellow-400 text-lg font-light"
               aria-label="Facebook"
             >
-              Facebook
+              <FaFacebook className="w-6 h-6 text-blue-600" />
             </a>
             <a
               href={links.twitter}
@@ -155,7 +155,7 @@ function Home({ sites, links }) {
               className="hover:text-yellow-400 text-lg font-light"
               aria-label="Twitter"
             >
-              Twitter
+              <FaTwitter className="w-6 h-6 text-blue-400" />
             </a>
             <a
               href={links.instagram}
@@ -164,16 +164,16 @@ function Home({ sites, links }) {
               className="hover:text-yellow-400 text-lg font-light"
               aria-label="Instagram"
             >
-              Instagram
+              <FaInstagram className="w-6 h-6 text-pink-500" />
             </a>
             <a
               href={links.linkedin}
               target="_blank"
               rel="noreferrer"
               className="hover:text-yellow-400 text-lg font-light"
-              aria-label="Instagram"
+              aria-label="LinkedIn"
             >
-              LinkedIn
+              <FaLinkedin className="w-6 h-6 text-blue-700" />
             </a>
           </div>
         </div>
