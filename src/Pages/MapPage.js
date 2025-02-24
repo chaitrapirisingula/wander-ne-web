@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { IoClose } from "react-icons/io5"; // Import the close icon from react-icons
+import { IoClose } from "react-icons/io5";
 import MapboxGL from "mapbox-gl";
 import WanderNebraskaLogo from "../Images/WanderDefaultImage.png";
 import SearchBar from "../Components/SearchBar";
