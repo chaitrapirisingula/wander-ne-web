@@ -129,6 +129,34 @@ function Home({ sites, links }) {
           </div>
         </div>
       </section>
+
+      {/* Booklet Flipbook */}
+      <section className="py-16 flex flex-col items-center text-center">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          Explore the WanderNebraska Booklet
+        </h2>
+        <p className="text-gray-600 max-w-2xl mb-6 flex flex-col">
+          Flip through the digital version below or request a physical copy to
+          take on your adventures!
+          <a
+            href="https://www.nshsf.org/projects/wandernebraska-request-a-booklet/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 font-semibold hover:underline"
+          >
+            Click here to request a booklet
+          </a>
+        </p>
+        <div className="flex justify-center items-center w-full">
+          <iframe
+            title="booklet"
+            src="https://heyzine.com/flip-book/06df3e8758.html"
+            className="border border-gray-300 rounded-md w-full max-w-3xl h-[500px] shadow-sm"
+            allowFullScreen
+          ></iframe>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="flex flex-col justify-center items-center py-8">
         <a href={links.nshsf_website} target="_blank" rel="noreferrer">
