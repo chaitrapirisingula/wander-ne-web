@@ -150,7 +150,7 @@ function Home({ sites, links }) {
         <div className="flex justify-center items-center w-full">
           <iframe
             title="booklet"
-            src="https://heyzine.com/flip-book/06df3e8758.html"
+            src="https://heyzine.com/flip-book/39d788e0af.html"
             className="border border-gray-300 rounded-md w-full max-w-3xl h-[500px] shadow-sm"
             allowFullScreen
           ></iframe>
