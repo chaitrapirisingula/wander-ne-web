@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { IoClose } from "react-icons/io5"; // Import the close icon from react-icons
+import { IoClose } from "react-icons/io5";
 import MapboxGL from "mapbox-gl";
 import WanderNebraskaLogo from "../Images/WanderDefaultImage.png";
 import SearchBar from "../Components/SearchBar";
@@ -199,7 +199,7 @@ const MapPage = ({ sites }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             zIndex: 1000,
-            width: "300px",
+            width: "250px",
           }}
         >
           <div className="flex justify-between items-start">
@@ -232,19 +232,68 @@ const PopupCard = ({ site }) => {
         className="rounded-lg shadow-lg h-32"
         onError={() => setImgError(true)}
       />
-      <h3 className="font-bold text-lg">{site.name}</h3>
+      <h3 className="font-bold text-lg mt-2">{site.name}</h3>
       <p className="text-sm text-gray-600">{site.city + ", " + site.state}</p>
-      <button
-        className="mt-2 px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
-        onClick={() => {
-          navigate("/explore/" + site.name, {
-            state: site,
-          });
-          window.scrollTo(0, 0);
-        }}
-      >
-        Learn More
-      </button>
+      <div className="flex flex-col gap-1">
+        <button
+          className="mt-2 px-2 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 flex flex-row items-center gap-1"
+          onClick={() => {
+            navigate("/explore/" + site.name, {
+              state: site,
+            });
+            window.scrollTo(0, 0);
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+            />
+          </svg>
+          <p>Learn More</p>
+        </button>
+        <a
+          href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+            site.name +
+              " " +
+              site.address +
+              " " +
+              site.city +
+              " " +
+              site.state +
+              " " +
+              site.zipCode
+          )}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 px-2 py-2 bg-green-500 text-white text-sm rounded hover:bg-green-600 flex flex-row items-center gap-1"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z"
+            />
+          </svg>
+
+          <p>Directions</p>
+        </a>
+      </div>
     </div>
   );
 };
