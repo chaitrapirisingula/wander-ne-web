@@ -134,6 +134,14 @@ export default function SitePage({ sites }) {
                   ))}
                 </ul>
               </div>
+
+              {/* Notes */}
+              {site.notes && (
+                <div>
+                  <h2 className="text-xl font-semibold text-blue-600">Notes</h2>
+                  <p className="text-gray-700">{site.notes}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
