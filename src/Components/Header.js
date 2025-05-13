@@ -69,7 +69,15 @@ function Header({ links }) {
             rel="noreferrer"
             className="cursor-pointer hover:text-yellow-400 transition duration-300"
           >
-            Support
+            Donate
+          </a>
+          <a
+            href={links.merch}
+            target="_blank"
+            rel="noreferrer"
+            className="cursor-pointer hover:text-yellow-400 transition duration-300"
+          >
+            Merch
           </a>
         </nav>
 
@@ -139,7 +147,15 @@ function Header({ links }) {
             rel="noreferrer"
             className="cursor-pointer block py-2 px-4 hover:bg-blue-600 transition duration-300"
           >
-            Support
+            Donate
+          </a>
+          <a
+            href={links.merch}
+            target="_blank"
+            rel="noreferrer"
+            className="cursor-pointer block py-2 px-4 hover:bg-blue-600 transition duration-300"
+          >
+            Merch
           </a>
         </nav>
       )}

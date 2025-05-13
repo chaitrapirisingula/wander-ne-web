@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 import LocationsBg from "../Images/MapBG.png";
 import ChimneyRock from "../Images/ChimneyRock.png";
 import WanderDefaultImage from "../Images/WanderDefaultImage.png";
 import NSHSF from "../Images/NSHSFLogo.png";
+import Merch from "../Images/Merch.png";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 
 function FeaturedSite({ site }) {
   const [imgError, setImgError] = useState(false);
@@ -36,7 +36,6 @@ function FeaturedSite({ site }) {
 
 function Home({ sites, links }) {
   const navigate = useNavigate();
-
   const [siteOne, setSiteOne] = useState({});
   const [siteTwo, setSiteTwo] = useState({});
   const [siteThree, setSiteThree] = useState({});
@@ -47,7 +46,6 @@ function Home({ sites, links }) {
       setSiteTwo(sites[Math.floor(Math.random() * sites.length)]);
       setSiteThree(sites[Math.floor(Math.random() * sites.length)]);
     };
-
     getFeaturedSites();
   }, [sites]);
 
@@ -57,6 +55,7 @@ function Home({ sites, links }) {
         <meta charSet="utf-8" />
         <title>WanderNebraska</title>
       </Helmet>
+
       {/* Hero Section */}
       <section className="relative bg-blue-500 text-white">
         <img
@@ -64,7 +63,7 @@ function Home({ sites, links }) {
           alt="wanderNE"
           className="w-full h-[500px] object-cover"
         />
-        <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="text-center px-4">
             <h1 className="text-5xl md:text-6xl tracking-wide">
               WanderNebraska
@@ -99,33 +98,52 @@ function Home({ sites, links }) {
             <FeaturedSite site={siteTwo} />
             <FeaturedSite site={siteThree} />
           </div>
+          <button
+            onClick={() => {
+              navigate("/map");
+              window.scrollTo(0, 0);
+            }}
+            className="mt-10 px-6 py-3 text-lg font-bold bg-blue-500  hover:bg-blue-600 text-white rounded-lg shadow-lg hover:scale-105 transform transition duration-300"
+          >
+            View Full Map
+          </button>
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="relative bg-yellow-500 text-white">
+      {/* Merch Section */}
+      <section className="relative text-white py-16">
         <img
           src={LocationsBg}
-          alt="wanderNE"
-          className="w-full h-[300px] object-cover"
+          alt="Merch Background"
+          className="w-full h-full object-cover absolute inset-0"
         />
-        <div className="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="container mx-auto text-center">
-            <h2 className="text-4xl font-extrabold">
-              Your Nebraska Adventure Awaits!
-            </h2>
-            <p className="mt-4 text-lg">
-              See what Nebraska has to offer across all regions.
-            </p>
-            <button
-              onClick={() => {
-                navigate("/map");
-                window.scrollTo(0, 0);
-              }}
-              className="mt-6 px-6 py-3 text-lg font-bold bg-gradient-to-r from-blue-500 via-blue-400 to-blue-300 hover:from-blue-400 hover:to-blue-500 text-white rounded-lg shadow-lg hover:scale-105 transform transition duration-300"
-            >
-              View Map
-            </button>
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div className="relative container mx-auto px-4 text-center">
+          <h2 className="text-4xl font-extrabold mb-4 text-yellow-400">
+            WanderNebraska Merch
+          </h2>
+          <p className="text-lg mb-6 max-w-2xl mx-auto text-white">
+            Show off your Nebraska pride with exclusive WanderNebraska gear!
+          </p>
+          <div className="flex flex-col items-center justify-center gap-8">
+            <img
+              src={Merch}
+              alt="WanderNebraska Merch"
+              className="w-3/4 max-w-2xl"
+            />
+            <div className="flex flex-col items-center text-center">
+              <p className="text-lg text-white mb-4">
+                Shirts, socks, and more — perfect for your next adventure.
+              </p>
+              <a
+                href={links.merch}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block px-6 py-3 text-lg font-bold bg-yellow-400 text-blue-900 rounded-lg shadow-lg hover:scale-105 transform transition duration-300"
+              >
+                Shop Now
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -157,6 +175,33 @@ function Home({ sites, links }) {
         </div>
       </section>
 
+      {/* Donation Section */}
+      <section className="relative text-white py-16">
+        <img
+          src={LocationsBg}
+          alt="Donation Background"
+          className="w-full h-full object-cover absolute inset-0"
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div className="relative max-w-3xl mx-auto text-center px-4">
+          <h2 className="text-4xl font-extrabold mb-4">
+            Support WanderNebraska
+          </h2>
+          <p className="text-lg mb-6">
+            Help us keep the adventure going! Your donation helps us highlight
+            Nebraska’s heritage attractions.
+          </p>
+          <a
+            href={links.donation}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-block px-6 py-3 text-lg font-bold bg-gradient-to-r from-blue-500 via-blue-400 to-blue-300 hover:from-blue-400 hover:to-blue-500 text-white rounded-lg shadow-lg hover:scale-105 transform transition duration-300"
+          >
+            Donate Now
+          </a>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="flex flex-col justify-center items-center py-8">
         <a href={links.nshsf_website} target="_blank" rel="noreferrer">
@@ -171,7 +216,6 @@ function Home({ sites, links }) {
               href={links.facebook}
               target="_blank"
               rel="noreferrer"
-              className="hover:text-yellow-400 text-lg font-light"
               aria-label="Facebook"
             >
               <FaFacebook className="w-6 h-6 text-blue-600" />
@@ -180,7 +224,6 @@ function Home({ sites, links }) {
               href={links.twitter}
               target="_blank"
               rel="noreferrer"
-              className="hover:text-yellow-400 text-lg font-light"
               aria-label="Twitter"
             >
               <FaTwitter className="w-6 h-6 text-blue-400" />
@@ -189,7 +232,6 @@ function Home({ sites, links }) {
               href={links.instagram}
               target="_blank"
               rel="noreferrer"
-              className="hover:text-yellow-400 text-lg font-light"
               aria-label="Instagram"
             >
               <FaInstagram className="w-6 h-6 text-pink-500" />
@@ -198,7 +240,6 @@ function Home({ sites, links }) {
               href={links.linkedin}
               target="_blank"
               rel="noreferrer"
-              className="hover:text-yellow-400 text-lg font-light"
               aria-label="LinkedIn"
             >
               <FaLinkedin className="w-6 h-6 text-blue-700" />

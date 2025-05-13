@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { db, sites_db, analytics } from "./Data/Firebase";
 import { logEvent } from "firebase/analytics";
@@ -11,14 +11,16 @@ import SitePage from "./Pages/SitePage";
 import Header from "./Components/Header";
 import Loading from "./Components/Loading";
 import MapPage from "./Pages/MapPage";
+import Merch from "./Images/Merch.png"; // merch image
 
 function App() {
   const [sites, setSites] = useState([]);
   const [links, setLinks] = useState({});
-
   const [linksLoaded, setLinksLoaded] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const popupRef = useRef(null);
 
   useEffect(() => {
     const getSites = async () => {
@@ -64,25 +66,89 @@ function App() {
     getLinks();
   }, []);
 
+  // Global Merch Popup Logic
+  useEffect(() => {
+    const visits = parseInt(localStorage.getItem("merchPopupVisits") || "0");
+    localStorage.setItem("merchPopupVisits", visits + 1);
+
+    if (visits % 3 === 0) {
+      const timer = setTimeout(() => {
+        setShowPopup(true);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  // Click outside popup to close
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (popupRef.current && !popupRef.current.contains(e.target)) {
+        setShowPopup(false);
+      }
+    };
+    if (showPopup) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showPopup]);
+
   return (
     <Router>
       <Header links={linksLoaded ? links : {}} />
+
+      {/* Global Merch Popup */}
+      {showPopup && links?.merch && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 font-oswald p-4">
+          <div
+            ref={popupRef}
+            className="bg-gray-200 p-6 rounded-lg max-w-2xl w-full text-center shadow-lg relative"
+          >
+            <button
+              onClick={() => setShowPopup(false)}
+              className="absolute top-2 right-4 text-gray-500 hover:text-red-500 text-3xl"
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <img
+              src={Merch}
+              alt="WanderNebraska Merch"
+              className="w-full h-auto rounded-md mb-4"
+            />
+            <h2 className="text-xl font-bold text-blue-700 mb-2">
+              Love Nebraska?
+            </h2>
+            <p className="text-gray-700 mb-4">
+              Grab exclusive WanderNebraska merch for your next trip!
+            </p>
+            <a
+              href={links.merch}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-block px-6 py-2 text-white bg-yellow-500 rounded-lg font-semibold hover:bg-yellow-400 transition"
+            >
+              Shop Merch
+            </a>
+          </div>
+        </div>
+      )}
+
       {error ? (
-        <div className="p-5 grid justify-items-center">
+        <div className="p-5 grid justify-items-center font-oswald">
           <h4 className="text-xl font-semibold text-red-600">
             An error occurred. Please try again later.
           </h4>
         </div>
-      ) : (
-        <></>
-      )}
+      ) : null}
+
       {!loaded && !error ? (
         <div className="bg-yellow-100 font-oswald">
           <Loading />
         </div>
-      ) : (
-        <></>
-      )}
+      ) : null}
+
       {loaded && linksLoaded && !error ? (
         <div className="mt-16 font-oswald">
           <Routes>
@@ -93,9 +159,7 @@ function App() {
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </div>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </Router>
   );
 }
