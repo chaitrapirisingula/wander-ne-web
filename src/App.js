@@ -118,7 +118,7 @@ function App() {
               className="w-full h-auto rounded-md mb-4"
             />
             <h2 className="text-xl font-bold text-blue-700 mb-2">
-              Love Nebraska?
+              Love Wandering Nebraska?
             </h2>
             <p className="text-gray-700 mb-4">
               Grab exclusive WanderNebraska merch for your next trip!
