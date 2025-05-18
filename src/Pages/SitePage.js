@@ -114,6 +114,21 @@ export default function SitePage({ sites }) {
                   )}
                 </p>
                 <p className="text-gray-700">
+                  <strong>Facebook:</strong>{" "}
+                  {site.facebook ? (
+                    <a
+                      href={site.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline"
+                    >
+                      {site.facebook}
+                    </a>
+                  ) : (
+                    "Not available"
+                  )}
+                </p>
+                <p className="text-gray-700">
                   <strong>Address:</strong>{" "}
                   {site.address +
                     ", " +
@@ -140,6 +155,16 @@ export default function SitePage({ sites }) {
                 <div>
                   <h2 className="text-xl font-semibold text-blue-600">Notes</h2>
                   <p className="text-gray-700">{site.notes}</p>
+                </div>
+              )}
+
+              {/* Events */}
+              {site.events && (
+                <div>
+                  <h2 className="text-xl font-semibold text-blue-600">
+                    Events
+                  </h2>
+                  <p className="text-gray-700">{site.events}</p>
                 </div>
               )}
             </div>

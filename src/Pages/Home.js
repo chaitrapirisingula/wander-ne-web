@@ -154,16 +154,7 @@ function Home({ sites, links }) {
           Explore the WanderNebraska Booklet
         </h2>
         <p className="text-gray-600 max-w-2xl mb-6 flex flex-col">
-          Flip through the digital version below or request a physical copy to
-          take on your adventures!
-          <a
-            href="https://www.nshsf.org/projects/wandernebraska-request-a-booklet/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 font-semibold hover:underline"
-          >
-            Click here to request a booklet
-          </a>
+          Flip through the digital version below
         </p>
         <div className="flex justify-center items-center w-full">
           <iframe

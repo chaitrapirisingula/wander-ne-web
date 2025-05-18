@@ -66,33 +66,34 @@ const MapPage = ({ sites }) => {
   // Geocode addresses using fetch
   useEffect(() => {
     const geocodeAddresses = async () => {
-      if (!sites || sites.length === 0) {
-        console.error("No sites provided to geocode.");
-        return;
-      }
+      if (!sites || sites.length === 0) return;
+
+      const cached = JSON.parse(localStorage.getItem("geocodedSites") || "{}");
+      const updated = {};
 
       const geocoded = await Promise.all(
         sites.map(async (site) => {
+          const cacheKey = `${site.address},${site.city},${site.state},${site.zipCode}`;
+          if (cached[cacheKey]) {
+            updated[cacheKey] = cached[cacheKey];
+            return { ...site, coordinates: cached[cacheKey] };
+          }
+
           try {
-            const response = await fetch(
+            const res = await fetch(
               `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
-                `${site.address}, ${site.city}, ${site.state}, ${site.zipCode}`
+                cacheKey
               )}.json?access_token=${
                 process.env.REACT_APP_MAPBOX_TOKEN
               }&limit=1`
             );
 
-            if (!response.ok) {
-              throw new Error(`Failed to fetch data for ${site.name}`);
-            }
-
-            const data = await response.json();
-            if (data.features.length === 0) {
-              throw new Error(`No results found for ${site.name}`);
-            }
-
+            const data = await res.json();
             const [lng, lat] = data.features[0].center;
-            return { ...site, coordinates: { lat, lng } };
+            const coords = { lat, lng };
+
+            updated[cacheKey] = coords;
+            return { ...site, coordinates: coords };
           } catch (error) {
             console.error(`Error geocoding ${site.name}:`, error);
             return null;
@@ -100,7 +101,8 @@ const MapPage = ({ sites }) => {
         })
       );
 
-      setGeocodedSites(geocoded.filter((site) => site !== null));
+      localStorage.setItem("geocodedSites", JSON.stringify(updated));
+      setGeocodedSites(geocoded.filter(Boolean));
     };
 
     geocodeAddresses();
