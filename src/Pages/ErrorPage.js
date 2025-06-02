@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../Data/Firebase";

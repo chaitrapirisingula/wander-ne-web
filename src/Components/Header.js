@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import WanderNebraskaLogo from "../Images/WanderNebraskaLogo.png";
 
@@ -8,7 +8,7 @@ function Header({ links }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="bg-blue-600 text-white fixed w-full top-0 z-50 shadow-md font-oswald">
+    <header className="bg-blue-500 text-white fixed w-full top-0 z-50 shadow-md font-oswald">
       <div className="container mx-auto px-4 flex justify-between items-center h-16">
         {/* Logo */}
         <img
@@ -62,6 +62,19 @@ function Header({ links }) {
             }
           >
             Map
+          </div>
+          <div
+            onClick={() => {
+              navigate("/events");
+              window.scrollTo(0, 0);
+            }}
+            className={
+              location.pathname === "/events"
+                ? "cursor-pointer text-yellow-400"
+                : "cursor-pointer hover:text-yellow-400 transition duration-300"
+            }
+          >
+            Events
           </div>
           <a
             href={links.donation}
@@ -140,6 +153,16 @@ function Header({ links }) {
             className="cursor-pointer block py-2 px-4 hover:bg-blue-600 transition duration-300"
           >
             Map
+          </div>
+          <div
+            onClick={() => {
+              navigate("/events");
+              window.scrollTo(0, 0);
+              setIsOpen(false);
+            }}
+            className="cursor-pointer block py-2 px-4 hover:bg-blue-600 transition duration-300"
+          >
+            Events
           </div>
           <a
             href={links.donation}

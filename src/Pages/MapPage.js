@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoClose } from "react-icons/io5";
 import MapboxGL from "mapbox-gl";
@@ -9,7 +9,6 @@ import "mapbox-gl/dist/mapbox-gl.css";
 const MapPage = ({ sites }) => {
   const mapContainer = useRef(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [geocodedSites, setGeocodedSites] = useState([]);
   const [filteredSites, setFilteredSites] = useState([]);
   const [selectedSite, setSelectedSite] = useState(null);
   const [viewState, setViewState] = useState({
@@ -63,51 +62,6 @@ const MapPage = ({ sites }) => {
     );
   }, []);
 
-  // Geocode addresses using fetch
-  useEffect(() => {
-    const geocodeAddresses = async () => {
-      if (!sites || sites.length === 0) return;
-
-      const cached = JSON.parse(localStorage.getItem("geocodedSites") || "{}");
-      const updated = {};
-
-      const geocoded = await Promise.all(
-        sites.map(async (site) => {
-          const cacheKey = `${site.address},${site.city},${site.state},${site.zipCode}`;
-          if (cached[cacheKey]) {
-            updated[cacheKey] = cached[cacheKey];
-            return { ...site, coordinates: cached[cacheKey] };
-          }
-
-          try {
-            const res = await fetch(
-              `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
-                cacheKey
-              )}.json?access_token=${
-                process.env.REACT_APP_MAPBOX_TOKEN
-              }&limit=1`
-            );
-
-            const data = await res.json();
-            const [lng, lat] = data.features[0].center;
-            const coords = { lat, lng };
-
-            updated[cacheKey] = coords;
-            return { ...site, coordinates: coords };
-          } catch (error) {
-            console.error(`Error geocoding ${site.name}:`, error);
-            return null;
-          }
-        })
-      );
-
-      localStorage.setItem("geocodedSites", JSON.stringify(updated));
-      setGeocodedSites(geocoded.filter(Boolean));
-    };
-
-    geocodeAddresses();
-  }, [sites]);
-
   // Function to calculate distance between two lat-lng coordinates (Haversine formula)
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
     const R = 6371; // Earth radius in km
@@ -125,9 +79,9 @@ const MapPage = ({ sites }) => {
 
   // Filter and sort the sites based on the search query and distance to the view state
   useEffect(() => {
-    if (!geocodedSites || geocodedSites.length === 0) return;
+    if (!sites || sites.length === 0) return;
 
-    const filteredAndSortedSites = geocodedSites
+    const filteredAndSortedSites = sites
       .filter((site) =>
         site.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
@@ -148,7 +102,7 @@ const MapPage = ({ sites }) => {
       });
 
     setFilteredSites(filteredAndSortedSites);
-  }, [searchQuery, geocodedSites, viewState]); // Update when search query or view state changes
+  }, [searchQuery, sites, viewState]); // Update when search query or view state changes
 
   // Add markers and handle popup interactions
   useEffect(() => {
@@ -250,13 +204,13 @@ const PopupCard = ({ site }) => {
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke="currentColor"
-            class="size-6"
+            className="size-6"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
             />
           </svg>
@@ -282,13 +236,13 @@ const PopupCard = ({ site }) => {
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke="currentColor"
-            class="size-6"
+            className="size-6"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z"
             />
           </svg>

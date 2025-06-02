@@ -1,5 +1,3 @@
-import React from "react";
-
 const SearchBar = ({ setSearchQuery }) => {
   return (
     <div className="flex justify-center items-center">

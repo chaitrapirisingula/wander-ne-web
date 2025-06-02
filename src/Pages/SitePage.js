@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { FaInfoCircle } from "react-icons/fa";
@@ -41,7 +41,7 @@ export default function SitePage({ sites }) {
   }
 
   return (
-    <div className="min-h-screen bg-yellow-100 ">
+    <div className="min-h-screen bg-yellow-100">
       <Helmet>
         <meta charSet="utf-8" />
         <title>{site.name}</title>
@@ -139,7 +139,6 @@ export default function SitePage({ sites }) {
                     site.zipCode}
                 </p>
               </div>
-
               {/* Hours of Operation */}
               <div>
                 <h2 className="text-xl font-semibold text-blue-600">Hours</h2>
@@ -149,22 +148,11 @@ export default function SitePage({ sites }) {
                   ))}
                 </ul>
               </div>
-
               {/* Notes */}
               {site.notes && (
                 <div>
                   <h2 className="text-xl font-semibold text-blue-600">Notes</h2>
                   <p className="text-gray-700">{site.notes}</p>
-                </div>
-              )}
-
-              {/* Events */}
-              {site.events && (
-                <div>
-                  <h2 className="text-xl font-semibold text-blue-600">
-                    Events
-                  </h2>
-                  <p className="text-gray-700">{site.events}</p>
                 </div>
               )}
             </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { db, sites_db, analytics } from "./Data/Firebase";
 import { logEvent } from "firebase/analytics";
@@ -11,7 +11,8 @@ import SitePage from "./Pages/SitePage";
 import Header from "./Components/Header";
 import Loading from "./Components/Loading";
 import MapPage from "./Pages/MapPage";
-import Merch from "./Images/Merch.png"; // merch image
+import Merch from "./Images/Merch.png";
+import Calendar from "./Pages/Calendar";
 
 function App() {
   const [sites, setSites] = useState([]);
@@ -25,7 +26,7 @@ function App() {
   useEffect(() => {
     const getSites = async () => {
       try {
-        const sitesRef = ref(sites_db, "2025_sites");
+        const sitesRef = ref(sites_db, "2025_wander_ne_sites");
         const snapshot = await get(sitesRef);
         if (snapshot.exists()) {
           const sitesData = [];
@@ -156,6 +157,7 @@ function App() {
             <Route path="/explore" element={<Sites sites={sites} />} />
             <Route path="/explore/:site" element={<SitePage sites={sites} />} />
             <Route path="/map" element={<MapPage sites={sites} />} />
+            <Route path="/events" element={<Calendar sites={sites} />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </div>
