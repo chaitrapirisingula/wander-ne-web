@@ -253,14 +253,21 @@ export default function Calendar({ sites = [] }) {
       </div>
 
       {selectedEvent && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-lg p-6 max-w-sm w-full relative">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          onClick={closeModal}
+        >
+          <div
+            className="bg-white rounded-xl shadow-lg p-6 max-w-sm w-full relative"
+            onClick={(e) => e.stopPropagation()} // Prevent modal close on inside click
+          >
             <button
               onClick={closeModal}
               className="absolute top-2 right-3 text-gray-500 hover:text-gray-800 text-xl"
             >
               &times;
             </button>
+
             {getSiteImage(selectedEvent.site) && (
               <SiteImage
                 img={getSiteImage(selectedEvent.site)}
@@ -268,6 +275,7 @@ export default function Calendar({ sites = [] }) {
                 sty={"w-full h-40 object-cover rounded-lg mb-4"}
               />
             )}
+
             <h3 className="text-xl font-bold text-blue-700">
               {selectedEvent.title}
             </h3>
@@ -279,6 +287,13 @@ export default function Calendar({ sites = [] }) {
             {selectedEvent.time && (
               <p className="text-sm text-gray-500">⏰ {selectedEvent.time}</p>
             )}
+
+            <a
+              href={`/explore/${encodeURIComponent(selectedEvent.site)}`}
+              className="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition"
+            >
+              Learn More →
+            </a>
           </div>
         </div>
       )}
