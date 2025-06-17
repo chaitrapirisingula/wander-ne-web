@@ -5,6 +5,7 @@ import { analytics } from "../Data/Firebase";
 import SiteCard from "../Components/SiteCard";
 import SearchBar from "../Components/SearchBar";
 import { SITE_TAGS } from "../Data/Constants";
+import PassportLogo from "../Images/nebraska_passport_2025_logo.png";
 
 function Sites({ sites }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -91,6 +92,34 @@ function Sites({ sites }) {
             </p>
           )}
         </div>
+      </div>
+
+      <div className="max-w-xl mx-auto text-center py-8 flex flex-col gap-2">
+        <p className="text-lg text-gray-800">
+          Discover Nebraska’s Passport Program, your guide to exploring
+          restaurants, wineries, retail stores, and more!&nbsp;
+          <a
+            href="https://nebraskapassport.com/request"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 font-semibold hover:underline"
+          >
+            Click here to request a passport.
+          </a>
+        </p>
+
+        <a
+          href="https://nebraskapassport.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block"
+        >
+          <img
+            src={PassportLogo}
+            alt="Nebraska Passport Program"
+            className="h-20 mx-auto hover:scale-105 transition-transform duration-200"
+          />
+        </a>
       </div>
     </div>
   );
