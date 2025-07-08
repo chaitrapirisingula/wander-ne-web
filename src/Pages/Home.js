@@ -6,6 +6,7 @@ import ChimneyRock from "../Images/ChimneyRock.png";
 import WanderDefaultImage from "../Images/WanderDefaultImage.png";
 import NSHSF from "../Images/NSHSFLogo.png";
 import Merch from "../Images/Merch.png";
+import PassportLogo from "../Images/nebraska_passport_2025_logo.png";
 import { useNavigate } from "react-router-dom";
 
 function FeaturedSite({ site }) {
@@ -189,6 +190,36 @@ function Home({ sites, links }) {
             className="inline-block px-6 py-3 text-lg font-bold bg-gradient-to-r from-blue-500 via-blue-400 to-blue-300 hover:from-blue-400 hover:to-blue-500 text-white rounded-lg shadow-lg hover:scale-105 transform transition duration-300"
           >
             Donate Now
+          </a>
+        </div>
+      </section>
+
+      <section className="py-8 pt-12">
+        <div className="max-w-xl mx-auto text-center flex flex-col gap-2">
+          <p className="text-lg text-gray-800">
+            Discover Nebraska’s Passport Program, your guide to exploring
+            restaurants, wineries, retail stores, and more!&nbsp;
+            <a
+              href="https://nebraskapassport.com/request"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 font-semibold hover:underline"
+            >
+              Click here to request a passport.
+            </a>
+          </p>
+
+          <a
+            href="https://nebraskapassport.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block"
+          >
+            <img
+              src={PassportLogo}
+              alt="Nebraska Passport Program"
+              className="h-20 mx-auto hover:scale-105 transition-transform duration-200"
+            />
           </a>
         </div>
       </section>
