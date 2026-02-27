@@ -151,11 +151,19 @@ function Home({ sites, links }) {
 
       {/* Booklet Flipbook */}
       <section className="py-16 flex flex-col items-center text-center">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-          Explore the WanderNebraska Booklet
-        </h2>
-        <p className="text-gray-600 max-w-2xl mb-6 flex flex-col">
-          Flip through the digital version below
+        <p className="text-xl md:text-2xl text-gray-800 max-w-2xl mb-6">
+          <a
+            href="https://secure.qgiv.com/for/wandernebraska/event/wandernebraska2026booklet/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 font-semibold hover:underline"
+          >
+            Request 2026 WanderNebraska booklets
+          </a>
+          {" — booklets will be mailed out in mid-April."}
+        </p>
+        <p className="text-gray-600 max-w-2xl mb-6">
+          Flip through the 2025 digital version below
         </p>
         <div className="flex justify-center items-center w-full">
           <iframe

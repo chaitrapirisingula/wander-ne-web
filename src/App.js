@@ -12,7 +12,6 @@ import Header from "./Components/Header";
 import Loading from "./Components/Loading";
 import MapPage from "./Pages/MapPage";
 import Merch from "./Images/Merch.png";
-import Calendar from "./Pages/Calendar";
 
 function App() {
   const [sites, setSites] = useState([]);
@@ -157,7 +156,6 @@ function App() {
             <Route path="/explore" element={<Sites sites={sites} />} />
             <Route path="/explore/:site" element={<SitePage sites={sites} />} />
             <Route path="/map" element={<MapPage sites={sites} />} />
-            <Route path="/events" element={<Calendar sites={sites} />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </div>
