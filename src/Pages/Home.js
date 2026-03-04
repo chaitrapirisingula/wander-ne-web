@@ -6,7 +6,7 @@ import ChimneyRock from "../Images/ChimneyRock.png";
 import WanderDefaultImage from "../Images/WanderDefaultImage.png";
 import NSHSF from "../Images/NSHSFLogo.png";
 import Merch from "../Images/Merch.png";
-import PassportLogo from "../Images/nebraska_passport_2025_logo.png";
+import PassportLogo from "../Images/nebraska_passport_2026_logo.png";
 import { useNavigate } from "react-router-dom";
 
 function FeaturedSite({ site }) {
@@ -56,6 +56,22 @@ function Home({ sites, links }) {
         <meta charSet="utf-8" />
         <title>WanderNebraska</title>
       </Helmet>
+
+      {/* Booklet banner */}
+      <section className="bg-gray-600/70 text-white py-4 px-4 text-center shadow-md backdrop-blur-sm">
+        <p className="text-lg md:text-xl font-semibold mb-1">
+          Your 2026 Nebraska adventure starts here — order your WanderNebraska
+          booklet now! Booklets ship mid-April.
+        </p>
+        <a
+          href="https://secure.qgiv.com/for/wandernebraska/event/wandernebraska2026booklet/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block mt-1 px-4 py-2 bg-yellow-400 text-blue-900 font-bold rounded-lg hover:bg-yellow-300 transition"
+        >
+          Get your booklet →
+        </a>
+      </section>
 
       {/* Hero Section */}
       <section className="relative bg-blue-500 text-white">
@@ -151,16 +167,19 @@ function Home({ sites, links }) {
 
       {/* Booklet Flipbook */}
       <section className="py-16 flex flex-col items-center text-center">
-        <p className="text-xl md:text-2xl text-gray-800 max-w-2xl mb-6">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          Explore the WanderNebraska Booklet
+        </h2>
+        <p className="text-xl md:text-2xl text-gray-800 max-w-2xl mb-4">
           <a
             href="https://secure.qgiv.com/for/wandernebraska/event/wandernebraska2026booklet/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-600 font-semibold hover:underline"
           >
-            Request 2026 WanderNebraska booklets
+            Order your 2026 booklet
           </a>
-          {" — booklets will be mailed out in mid-April."}
+          {" — your guide to exploring Nebraska, mailed in mid-April!"}
         </p>
         <p className="text-gray-600 max-w-2xl mb-6">
           Flip through the 2025 digital version below

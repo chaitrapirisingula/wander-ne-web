@@ -5,7 +5,7 @@ import { analytics } from "../Data/Firebase";
 import SiteCard from "../Components/SiteCard";
 import SearchBar from "../Components/SearchBar";
 import { SITE_TAGS } from "../Data/Constants";
-import PassportLogo from "../Images/nebraska_passport_2025_logo.png";
+import PassportLogo from "../Images/nebraska_passport_2026_logo.png";
 
 function Sites({ sites }) {
   const [searchQuery, setSearchQuery] = useState("");
