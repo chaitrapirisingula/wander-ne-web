@@ -150,7 +150,7 @@ function App() {
       ) : null}
 
       {loaded && linksLoaded && !error ? (
-        <div className="mt-16 font-oswald">
+        <div className="mt-28 font-oswald">
           <Routes>
             <Route path="/" element={<Home sites={sites} links={links} />} />
             <Route path="/explore" element={<Sites sites={sites} />} />

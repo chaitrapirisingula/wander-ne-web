@@ -8,105 +8,115 @@ function Header({ links }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="bg-blue-500 text-white fixed w-full top-0 z-50 shadow-md font-oswald">
-      <div className="container mx-auto px-4 flex justify-between items-center h-16">
-        {/* Logo */}
-        <img
-          src={WanderNebraskaLogo}
-          alt="Home"
-          onClick={() => {
-            navigate("/explore");
-            window.scrollTo(0, 0);
-            setIsOpen(false);
-          }}
-          className="cursor-pointer h-16"
-        />
-
-        {/* Navigation Links for Desktop */}
-        <nav className="hidden md:flex space-x-8">
-          <div
-            onClick={() => {
-              navigate("/");
-              window.scrollTo(0, 0);
-            }}
-            className={
-              location.pathname === "/"
-                ? "cursor-pointer text-yellow-400"
-                : "cursor-pointer hover:text-yellow-400 transition duration-300"
-            }
-          >
-            About
-          </div>
-          <div
+    <header className="fixed w-full top-0 z-50 shadow-md font-oswald">
+      <div className="bg-blue-500 text-white w-full">
+        <div className="container mx-auto px-4 flex justify-between items-center h-16">
+          {/* Logo */}
+          <img
+            src={WanderNebraskaLogo}
+            alt="Home"
             onClick={() => {
               navigate("/explore");
               window.scrollTo(0, 0);
+              setIsOpen(false);
             }}
-            className={
-              location.pathname === "/explore"
-                ? "cursor-pointer text-yellow-400"
-                : "cursor-pointer hover:text-yellow-400 transition duration-300"
-            }
-          >
-            Explore
-          </div>
-          <div
-            onClick={() => {
-              navigate("/map");
-              window.scrollTo(0, 0);
-            }}
-            className={
-              location.pathname === "/map"
-                ? "cursor-pointer text-yellow-400"
-                : "cursor-pointer hover:text-yellow-400 transition duration-300"
-            }
-          >
-            Map
-          </div>
-          <a
-            href={links.donation}
-            target="_blank"
-            rel="noreferrer"
-            className="cursor-pointer hover:text-yellow-400 transition duration-300"
-          >
-            Donate
-          </a>
-          <a
-            href={links.merch}
-            target="_blank"
-            rel="noreferrer"
-            className="cursor-pointer hover:text-yellow-400 transition duration-300"
-          >
-            Merch
-          </a>
-        </nav>
+            className="cursor-pointer h-16"
+          />
 
-        {/* Hamburger Menu for Mobile */}
-        <button
-          className="md:hidden flex items-center focus:outline-none"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <span className="sr-only">Open Menu</span>
-          <svg
-            className="w-6 h-6"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d={
-                isOpen
-                  ? "M6 18L18 6M6 6l12 12" // Cross icon when menu is open
-                  : "M4 6h16M4 12h16M4 18h16" // Hamburger menu icon when closed
+          {/* Navigation Links for Desktop */}
+          <nav className="hidden md:flex space-x-8">
+            <div
+              onClick={() => {
+                navigate("/");
+                window.scrollTo(0, 0);
+              }}
+              className={
+                location.pathname === "/"
+                  ? "cursor-pointer text-yellow-400"
+                  : "cursor-pointer hover:text-yellow-400 transition duration-300"
               }
-            />
-          </svg>
-        </button>
+            >
+              About
+            </div>
+            <div
+              onClick={() => {
+                navigate("/explore");
+                window.scrollTo(0, 0);
+              }}
+              className={
+                location.pathname === "/explore"
+                  ? "cursor-pointer text-yellow-400"
+                  : "cursor-pointer hover:text-yellow-400 transition duration-300"
+              }
+            >
+              Explore
+            </div>
+            <div
+              onClick={() => {
+                navigate("/map");
+                window.scrollTo(0, 0);
+              }}
+              className={
+                location.pathname === "/map"
+                  ? "cursor-pointer text-yellow-400"
+                  : "cursor-pointer hover:text-yellow-400 transition duration-300"
+              }
+            >
+              Map
+            </div>
+            <a
+              href={links.donation}
+              target="_blank"
+              rel="noreferrer"
+              className="cursor-pointer hover:text-yellow-400 transition duration-300"
+            >
+              Donate
+            </a>
+            <a
+              href={links.merch}
+              target="_blank"
+              rel="noreferrer"
+              className="cursor-pointer hover:text-yellow-400 transition duration-300"
+            >
+              Merch
+            </a>
+          </nav>
+
+          {/* Hamburger Menu for Mobile */}
+          <button
+            className="md:hidden flex items-center focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <span className="sr-only">Open Menu</span>
+            <svg
+              className="w-6 h-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d={
+                  isOpen
+                    ? "M6 18L18 6M6 6l12 12" // Cross icon when menu is open
+                    : "M4 6h16M4 12h16M4 18h16" // Hamburger menu icon when closed
+                }
+              />
+            </svg>
+          </button>
+        </div>
       </div>
+
+      {/* 2025 info banner - appears on all pages, below header */}
+      <section className="bg-amber-100 border-b border-amber-300 text-amber-900 py-3 px-4 text-center">
+        <p className="text-sm md:text-base font-medium">
+          Site information reflects the 2025 WanderNebraska season. 2026 sites
+          will be available in April.
+        </p>
+      </section>
 
       {/* Dropdown Menu for Mobile */}
       {isOpen && (
