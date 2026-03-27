@@ -6,10 +6,15 @@ import SiteCard from "../Components/SiteCard";
 import SearchBar from "../Components/SearchBar";
 import { SITE_TAGS } from "../Data/Constants";
 import PassportLogo from "../Images/nebraska_passport_2026_logo.png";
+import YourParksLogo from "../Images/your-parks-adventure-logo.png";
+import { isSpecial50Site } from "../Components/Special50Badge";
 
 function Sites({ sites }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [filterSpecial50, setFilterSpecial50] = useState(false);
+
+  const hasSpecial50Sites = sites.some((s) => isSpecial50Site(s));
 
   useEffect(() => {
     logEvent(analytics, "sites_visit");
@@ -25,17 +30,20 @@ function Sites({ sites }) {
     );
   };
 
-  // Filter sites based on search and selected features
+  // Filter sites based on search, features, and special50
   const filteredSites = sites.filter((site) => {
     const matchesSearch =
       site.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       site.city.toLowerCase().includes(searchQuery.toLowerCase());
 
+    const features = site.features || [];
     const matchesFeatures =
       selectedFeatures.length === 0 ||
-      selectedFeatures.every((feature) => site.features.includes(feature));
+      selectedFeatures.every((feature) => features.includes(feature));
 
-    return matchesSearch && matchesFeatures;
+    const matchesSpecial50 = !filterSpecial50 || isSpecial50Site(site);
+
+    return matchesSearch && matchesFeatures && matchesSpecial50;
   });
 
   return (
@@ -53,6 +61,34 @@ function Sites({ sites }) {
         <div className="w-full">
           <SearchBar setSearchQuery={setSearchQuery} />
         </div>
+
+        {/* Special Sites filter — own row */}
+        {hasSpecial50Sites && (
+          <div className="max-w-4xl w-full">
+            <h2 className="text-xl font-semibold text-blue-700 mb-2 text-center">
+              Special program:
+            </h2>
+            <div className="flex justify-center">
+              <button
+                type="button"
+                className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-2 transition border ${
+                  filterSpecial50
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300 border-gray-300"
+                }`}
+                onClick={() => setFilterSpecial50((v) => !v)}
+              >
+                <img
+                  src={YourParksLogo}
+                  alt=""
+                  className="h-7 w-7 object-contain"
+                  aria-hidden
+                />
+                Special Sites (Trail Trek)
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Feature Filters */}
         <div className="max-w-4xl">

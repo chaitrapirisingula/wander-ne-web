@@ -25,7 +25,7 @@ function App() {
   useEffect(() => {
     const getSites = async () => {
       try {
-        const sitesRef = ref(sites_db, "2025_wander_ne_sites");
+        const sitesRef = ref(sites_db, "2026_sites");
         const snapshot = await get(sitesRef);
         if (snapshot.exists()) {
           const sitesData = [];
@@ -150,7 +150,7 @@ function App() {
       ) : null}
 
       {loaded && linksLoaded && !error ? (
-        <div className="mt-28 font-oswald">
+        <div className="mt-16 font-oswald">
           <Routes>
             <Route path="/" element={<Home sites={sites} links={links} />} />
             <Route path="/explore" element={<Sites sites={sites} />} />

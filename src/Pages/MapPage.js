@@ -1,23 +1,165 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoClose } from "react-icons/io5";
 import MapboxGL from "mapbox-gl";
 import WanderNebraskaLogo from "../Images/WanderDefaultImage.png";
 import SearchBar from "../Components/SearchBar";
+import { isSpecial50Site, Special50Badge } from "../Components/Special50Badge";
 import "mapbox-gl/dist/mapbox-gl.css";
+
+const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
+
+/** Same validity check as wander-ne-mobile before placing a marker. */
+function isValidMarkerPosition(lat, lng) {
+  const la = Number(lat);
+  const ln = Number(lng);
+  return (
+    !Number.isNaN(la) &&
+    !Number.isNaN(ln) &&
+    ln >= -180 &&
+    ln <= 180 &&
+    la >= -90 &&
+    la <= 90 &&
+    !(ln === 0 && la === 0)
+  );
+}
+
+/** Parse latitude/longitude from site (numbers or numeric strings). */
+function parseLatLngPair(site) {
+  if (!site) return null;
+  let lat = site.latitude;
+  let lng = site.longitude;
+  if (lat != null && typeof lat !== "number") lat = parseFloat(lat);
+  if (lng != null && typeof lng !== "number") lng = parseFloat(lng);
+  if (
+    typeof lat === "number" &&
+    typeof lng === "number" &&
+    !Number.isNaN(lat) &&
+    !Number.isNaN(lng) &&
+    isValidMarkerPosition(lat, lng)
+  ) {
+    return { lat, lng };
+  }
+  return null;
+}
+
+/** Legacy shapes: coordinates.lat/lng or [lng, lat]. */
+function parseLegacyCoordinates(site) {
+  const c = site.coordinates;
+  if (c && typeof c.lat === "number" && typeof c.lng === "number") {
+    if (isValidMarkerPosition(c.lat, c.lng)) return { lat: c.lat, lng: c.lng };
+  }
+  if (c && Array.isArray(c) && c.length >= 2) {
+    const lng = Number(c[0]);
+    const lat = Number(c[1]);
+    if (isValidMarkerPosition(lat, lng)) return { lat, lng };
+  }
+  return null;
+}
+
+/** Geocode address using Mapbox Geocoding API (same as wander-ne-mobile). */
+async function geocodeAddress(address, city, state) {
+  if (!MAPBOX_TOKEN || !address) return null;
+  try {
+    const query = [address, city, state].filter(Boolean).join(", ");
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+      query
+    )}.json?access_token=${MAPBOX_TOKEN}&limit=1`;
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data.features && data.features.length > 0) {
+      const [lng, lat] = data.features[0].center;
+      if (
+        typeof lat === "number" &&
+        typeof lng === "number" &&
+        !Number.isNaN(lat) &&
+        !Number.isNaN(lng)
+      ) {
+        return { lat, lng };
+      }
+    }
+    return null;
+  } catch (e) {
+    console.error("Geocoding error:", e);
+    return null;
+  }
+}
+
+/** Resolve direct coords (mobile: only number lat/lng; we also accept strings). */
+function resolveDirectCoordinates(site) {
+  return parseLatLngPair(site) || parseLegacyCoordinates(site);
+}
 
 const MapPage = ({ sites }) => {
   const mapContainer = useRef(null);
   const [searchQuery, setSearchQuery] = useState("");
+  /** Sites with resolved lat/lng (same pipeline as mobile: direct + geocoded). */
+  const [sitesWithCoords, setSitesWithCoords] = useState([]);
+  const [geocoding, setGeocoding] = useState(false);
   const [filteredSites, setFilteredSites] = useState([]);
   const [selectedSite, setSelectedSite] = useState(null);
   const [viewState, setViewState] = useState({
-    latitude: 41.4925, // Default center in Nebraska
+    latitude: 41.4925,
     longitude: -99.9018,
     zoom: 10,
   });
 
   const map = useRef(null);
+  const markersRef = useRef([]);
+  const geocodeGeneration = useRef(0);
+
+  // Build sitesWithCoords: direct coordinates first, then Mapbox geocode for the rest (wander-ne-mobile)
+  useEffect(() => {
+    if (!sites || sites.length === 0) {
+      setSitesWithCoords([]);
+      setGeocoding(false);
+      return;
+    }
+
+    setGeocoding(false);
+    const gen = ++geocodeGeneration.current;
+    const initial = [];
+    const toGeocode = [];
+
+    sites.forEach((site) => {
+      const direct = resolveDirectCoordinates(site);
+      if (direct) {
+        initial.push({ ...site, lat: direct.lat, lng: direct.lng });
+      } else if (site.address) {
+        toGeocode.push(site);
+      }
+    });
+
+    setSitesWithCoords(initial);
+
+    if (toGeocode.length === 0) return;
+
+    setGeocoding(true);
+    (async () => {
+      const geocodedResults = await Promise.all(
+        toGeocode.map(async (site) => {
+          const coords = await geocodeAddress(
+            site.address,
+            site.city,
+            site.state
+          );
+          if (
+            coords &&
+            isValidMarkerPosition(coords.lat, coords.lng)
+          ) {
+            return { ...site, lat: coords.lat, lng: coords.lng };
+          }
+          return null;
+        })
+      );
+
+      if (gen !== geocodeGeneration.current) return;
+
+      const merged = geocodedResults.filter(Boolean);
+      setSitesWithCoords((prev) => [...prev, ...merged]);
+      setGeocoding(false);
+    })();
+  }, [sites]);
 
   // Initialize map & update view state when user moves map
   useEffect(() => {
@@ -26,7 +168,7 @@ const MapPage = ({ sites }) => {
       style: "mapbox://styles/mapbox/streets-v11",
       center: [viewState.longitude, viewState.latitude],
       zoom: viewState.zoom,
-      accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
+      accessToken: MAPBOX_TOKEN,
     });
 
     map.current.on("moveend", () => {
@@ -38,7 +180,6 @@ const MapPage = ({ sites }) => {
       }));
     });
 
-    // Clean up the map when the component unmounts
     return () => map.current.remove();
   }, []);
 
@@ -52,19 +193,20 @@ const MapPage = ({ sites }) => {
           zoom: 12,
         };
         setViewState(newViewState);
-        map.current.flyTo({
-          center: [newViewState.longitude, newViewState.latitude],
-          zoom: newViewState.zoom,
-        });
+        if (map.current) {
+          map.current.flyTo({
+            center: [newViewState.longitude, newViewState.latitude],
+            zoom: newViewState.zoom,
+          });
+        }
       },
       (error) => console.error("Error fetching location: ", error),
       { enableHighAccuracy: true }
     );
   }, []);
 
-  // Function to calculate distance between two lat-lng coordinates (Haversine formula)
-  const calculateDistance = (lat1, lng1, lat2, lng2) => {
-    const R = 6371; // Earth radius in km
+  const calculateDistance = useCallback((lat1, lng1, lat2, lng2) => {
+    const R = 6371;
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLng = ((lng2 - lng1) * Math.PI) / 180;
     const a =
@@ -74,79 +216,102 @@ const MapPage = ({ sites }) => {
         Math.sin(dLng / 2) *
         Math.sin(dLng / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // Distance in km
-  };
+    return R * c;
+  }, []);
 
-  // Filter and sort the sites based on the search query and distance to the view state
+  // Filter and sort by search + distance (only sites that already have lat/lng)
   useEffect(() => {
-    if (!sites || sites.length === 0) return;
+    if (!sitesWithCoords.length) {
+      setFilteredSites([]);
+      return;
+    }
 
-    const filteredAndSortedSites = sites
-      .filter((site) =>
-        site.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+    const q = searchQuery.toLowerCase();
+    const filteredAndSortedSites = sitesWithCoords
+      .filter((site) => site.name && site.name.toLowerCase().includes(q))
       .sort((a, b) => {
         const distanceA = calculateDistance(
           viewState.latitude,
           viewState.longitude,
-          a.coordinates.lat,
-          a.coordinates.lng
+          a.lat,
+          a.lng
         );
         const distanceB = calculateDistance(
           viewState.latitude,
           viewState.longitude,
-          b.coordinates.lat,
-          b.coordinates.lng
+          b.lat,
+          b.lng
         );
         return distanceA - distanceB;
       });
 
     setFilteredSites(filteredAndSortedSites);
-  }, [searchQuery, sites, viewState]); // Update when search query or view state changes
+  }, [searchQuery, sitesWithCoords, viewState, calculateDistance]);
 
-  // Add markers and handle popup interactions
+  // Markers: one per filtered site (all have lat/lng)
   useEffect(() => {
-    if (!map.current || filteredSites.length === 0) return;
+    if (!map.current) return;
+
+    markersRef.current.forEach((m) => m.remove());
+    markersRef.current = [];
 
     filteredSites.forEach((site) => {
       const marker = new MapboxGL.Marker()
-        .setLngLat([site.coordinates.lng, site.coordinates.lat])
+        .setLngLat([site.lng, site.lat])
         .addTo(map.current);
 
       marker.getElement().addEventListener("click", () => {
         setSelectedSite(site);
         map.current.flyTo({
-          center: [site.coordinates.lng, site.coordinates.lat],
+          center: [site.lng, site.lat],
           zoom: 12,
         });
       });
+
+      markersRef.current.push(marker);
     });
   }, [filteredSites]);
 
   return (
-    <div className="relative h-screen w-screen">
+    <div className="relative h-screen w-screen font-oswald">
       <div ref={mapContainer} style={{ width: "100%", height: "100%" }} />
-      {/* Site Cards */}
-      <div className="absolute top-0 left-0 w-1/3 h-screen overflow-y-auto shadow-lg p-4">
+      {geocoding && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[1001] bg-white/95 px-4 py-2 rounded-lg shadow text-sm text-gray-800">
+          Geocoding addresses…
+        </div>
+      )}
+      <div className="absolute top-0 left-0 w-1/3 h-screen overflow-y-auto shadow-lg p-4 bg-yellow-50/95">
         <div className="pb-4">
           <SearchBar setSearchQuery={setSearchQuery} />
         </div>
+        {!MAPBOX_TOKEN && (
+          <p className="text-sm text-red-600 mb-2">
+            REACT_APP_MAPBOX_TOKEN is missing; geocoding will not run.
+          </p>
+        )}
         {filteredSites.map((site) => (
           <SiteCard
-            key={site.id}
+            key={site.id || site.name}
             site={site}
             onClick={() => {
               setSelectedSite(site);
-              map.current.flyTo({
-                center: [site.coordinates.lng, site.coordinates.lat],
-                zoom: 12,
-              });
+              if (map.current) {
+                map.current.flyTo({
+                  center: [site.lng, site.lat],
+                  zoom: 12,
+                });
+              }
             }}
           />
         ))}
+        {sitesWithCoords.length === 0 && !geocoding && sites?.length > 0 && (
+          <p className="text-sm text-gray-600 mt-2">
+            No sites with location data yet. Add coordinates or addresses in
+            Firebase.
+          </p>
+        )}
       </div>
 
-      {/* Popup for selected site */}
       {selectedSite && (
         <div
           className="absolute bg-white p-4 rounded-lg shadow-lg"
@@ -159,13 +324,11 @@ const MapPage = ({ sites }) => {
           }}
         >
           <div className="flex justify-between items-start">
-            {/* PopupCard on the left */}
             <PopupCard site={selectedSite} />
-
-            {/* Close button on the right */}
             <button
               className="text-gray-500 hover:text-gray-700 text-xl"
-              onClick={() => setSelectedSite(null)} // Close popup
+              onClick={() => setSelectedSite(null)}
+              aria-label="Close"
             >
               <IoClose />
             </button>
@@ -182,12 +345,15 @@ const PopupCard = ({ site }) => {
 
   return (
     <div className="p-4 max-w-xs">
-      <img
-        src={!imgError && site.image ? site.image : WanderNebraskaLogo}
-        alt={site.name}
-        className="rounded-lg shadow-lg h-32"
-        onError={() => setImgError(true)}
-      />
+      <div className="relative inline-block w-full">
+        <img
+          src={!imgError && site.image ? site.image : WanderNebraskaLogo}
+          alt={site.name}
+          className="rounded-lg shadow-lg h-32 w-full object-cover"
+          onError={() => setImgError(true)}
+        />
+        {isSpecial50Site(site) && <Special50Badge />}
+      </div>
       <h3 className="font-bold text-lg mt-2">{site.name}</h3>
       <p className="text-sm text-gray-600">{site.city + ", " + site.state}</p>
       <div className="flex flex-col gap-1">
@@ -262,20 +428,19 @@ const SiteCard = ({ site, onClick }) => {
       className="p-4 mb-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 flex items-center flex-col md:flex-row"
       onClick={onClick}
     >
-      {/* Left: Site Details */}
       <div className="flex-1 p-2">
         <h3 className="font-bold text-center md:text-left">{site.name}</h3>
         <p className="hidden sm:flex text-sm text-gray-600 text-center md:text-left">{`${site.address}, ${site.city}, ${site.state} ${site.zipCode}`}</p>
       </div>
 
-      {/* Right: Site Image */}
-      <div className="hidden sm:flex w-32 h-16 flex-shrink-0">
+      <div className="hidden sm:flex w-32 h-16 flex-shrink-0 relative">
         <img
           src={!imgError && site.image ? site.image : WanderNebraskaLogo}
           alt={site.name}
           className="rounded-lg shadow-lg w-full h-full object-cover"
           onError={() => setImgError(true)}
         />
+        {isSpecial50Site(site) && <Special50Badge compact />}
       </div>
     </div>
   );

@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { FaInfoCircle } from "react-icons/fa";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../Data/Firebase";
 import Loading from "../Components/Loading";
 import WanderNebraskaLogo from "../Images/WanderDefaultImage.png";
 import ErrorPage from "./ErrorPage";
 import { SITE_TAGS } from "../Data/Constants";
+import YourParksLogo from "../Images/your-parks-adventure-logo.png";
+import { isSpecial50Site, Special50Badge } from "../Components/Special50Badge";
 
 export default function SitePage({ sites }) {
   const [loading, setLoading] = useState(true);
@@ -46,19 +47,6 @@ export default function SitePage({ sites }) {
         <meta charSet="utf-8" />
         <title>{site.name}</title>
       </Helmet>
-      <section className="bg-black bg-opacity-50 text-white">
-        <div className="container mx-auto px-4 py-4 text-center">
-          <div className="flex items-center justify-center gap-2">
-            <FaInfoCircle className="hidden lg:flex w-4 h-4 text-yellow-400" />
-            <p className="my-2">
-              The hours listed on this website are valid during the 2025
-              WanderNebraska season (May 1st to September 30th). For more
-              information on off-season hours, please reach out to the
-              respective sites directly.
-            </p>
-          </div>
-        </div>
-      </section>
 
       <div className="container mx-auto px-4 py-8">
         {/* Site Header */}
@@ -67,16 +55,42 @@ export default function SitePage({ sites }) {
           <p className="text-gray-600 text-lg mt-2">{site.region}</p>
         </div>
 
+        {isSpecial50Site(site) && (
+          <div className="max-w-2xl mx-auto mb-8 rounded-xl border border-green-200 bg-green-50 p-4 text-left">
+            <img
+              src={YourParksLogo}
+              alt="Your Parks Adventure"
+              className="h-16 w-16 object-contain mb-3"
+            />
+            <p className="text-gray-800 text-base leading-relaxed mb-3">
+              This site is one of the 50 designated Trail Trek & WanderNebraska
+              Special Sites. Celebrate Nebraska&apos;s history and natural
+              beauty!
+            </p>
+            <a
+              href="https://yourparksadventure.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline text-base"
+            >
+              Learn more at yourparksadventure.com
+            </a>
+          </div>
+        )}
+
         {/* Content Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Image Section */}
           <div className="flex justify-center">
-            <img
-              src={!imgError && site.image ? site.image : WanderNebraskaLogo}
-              alt={site.name}
-              className="rounded-lg shadow-lg w-full max-w-md object-cover"
-              onError={() => setImgError(true)}
-            />
+            <div className="relative w-full max-w-md">
+              <img
+                src={!imgError && site.image ? site.image : WanderNebraskaLogo}
+                alt={site.name}
+                className="rounded-lg shadow-lg w-full object-cover"
+                onError={() => setImgError(true)}
+              />
+              {isSpecial50Site(site) && <Special50Badge />}
+            </div>
           </div>
 
           {/* Details Section */}

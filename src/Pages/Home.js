@@ -8,6 +8,7 @@ import NSHSF from "../Images/NSHSFLogo.png";
 import Merch from "../Images/Merch.png";
 import PassportLogo from "../Images/nebraska_passport_2026_logo.png";
 import { useNavigate } from "react-router-dom";
+import { isSpecial50Site, Special50Badge } from "../Components/Special50Badge";
 
 function FeaturedSite({ site }) {
   const [imgError, setImgError] = useState(false);
@@ -21,12 +22,15 @@ function FeaturedSite({ site }) {
         window.scrollTo(0, 0);
       }}
     >
-      <img
-        src={!imgError && site.image ? site.image : WanderDefaultImage}
-        alt={site.name}
-        className="w-full h-48 object-cover"
-        onError={() => setImgError(true)}
-      />
+      <div className="relative w-full h-48">
+        <img
+          src={!imgError && site.image ? site.image : WanderDefaultImage}
+          alt={site.name}
+          className="w-full h-48 object-cover"
+          onError={() => setImgError(true)}
+        />
+        {isSpecial50Site(site) && <Special50Badge />}
+      </div>
       <div className="p-4">
         <h3 className="text-2xl font-semibold text-blue-700">{site.name}</h3>
         <p className="text-gray-600 mt-2">{site.city + ", " + site.state}</p>
@@ -182,15 +186,17 @@ function Home({ sites, links }) {
           {" — your guide to exploring Nebraska, mailed in mid-April!"}
         </p>
         <p className="text-gray-600 max-w-2xl mb-6">
-          Flip through the 2025 digital version below
+          Flip through the digital booklet below
         </p>
         <div className="flex justify-center items-center w-full">
           <iframe
-            title="booklet"
-            src="https://heyzine.com/flip-book/39d788e0af.html"
-            className="border border-gray-300 rounded-md w-full max-w-3xl h-[500px] shadow-sm"
+            title="WanderNebraska 2026 booklet"
             allowFullScreen
-          ></iframe>
+            allow="clipboard-write"
+            scrolling="no"
+            src="https://heyzine.com/flip-book/c8bf67a12e.html"
+            className="fp-iframe border border-gray-300 rounded-md w-full max-w-3xl h-[400px] shadow-sm"
+          />
         </div>
       </section>
 

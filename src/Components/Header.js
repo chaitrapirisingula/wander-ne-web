@@ -110,14 +110,6 @@ function Header({ links }) {
         </div>
       </div>
 
-      {/* 2025 info banner - appears on all pages, below header */}
-      <section className="bg-amber-100 border-b border-amber-300 text-amber-900 py-3 px-4 text-center">
-        <p className="text-sm md:text-base font-medium">
-          Site information reflects the 2025 WanderNebraska season. 2026 sites
-          will be available in April.
-        </p>
-      </section>
-
       {/* Dropdown Menu for Mobile */}
       {isOpen && (
         <nav className="md:hidden bg-blue-800 text-white">

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import WanderDefaultImage from "../Images/WanderDefaultImage.png";
 import { SITE_TAGS } from "../Data/Constants";
+import { isSpecial50Site, Special50Badge } from "./Special50Badge";
 
 function SiteCard({ props }) {
   const [imgError, setImgError] = useState(false);
@@ -16,13 +17,14 @@ function SiteCard({ props }) {
       className="cursor-pointer rounded-lg shadow-md bg-white w-full max-w-xs mx-auto flex flex-col transition-transform transform hover:scale-105 hover:shadow-lg"
     >
       {/* Image */}
-      <div className="h-40 w-full overflow-hidden rounded-t-lg">
+      <div className="relative h-40 w-full overflow-hidden rounded-t-lg">
         <img
           src={!imgError && props.image ? props.image : WanderDefaultImage}
           alt={props.name}
           className="w-full h-full object-cover"
           onError={() => setImgError(true)}
         />
+        {isSpecial50Site(props) && <Special50Badge />}
       </div>
 
       {/* Content */}
