@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoClose } from "react-icons/io5";
 import MapboxGL from "mapbox-gl";
 import WanderNebraskaLogo from "../Images/WanderDefaultImage.png";
 import SearchBar from "../Components/SearchBar";
 import { isSpecial50Site, Special50Badge } from "../Components/Special50Badge";
+import { siteKey, dedupeSitesByKey } from "../Data/siteUtils";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -96,7 +97,6 @@ const MapPage = ({ sites }) => {
   /** Sites with resolved lat/lng (same pipeline as mobile: direct + geocoded). */
   const [sitesWithCoords, setSitesWithCoords] = useState([]);
   const [geocoding, setGeocoding] = useState(false);
-  const [filteredSites, setFilteredSites] = useState([]);
   const [selectedSite, setSelectedSite] = useState(null);
   const [viewState, setViewState] = useState({
     latitude: 41.4925,
@@ -121,7 +121,8 @@ const MapPage = ({ sites }) => {
     const initial = [];
     const toGeocode = [];
 
-    sites.forEach((site) => {
+    const uniqueSites = dedupeSitesByKey(sites);
+    uniqueSites.forEach((site) => {
       const direct = resolveDirectCoordinates(site);
       if (direct) {
         initial.push({ ...site, lat: direct.lat, lng: direct.lng });
@@ -130,7 +131,7 @@ const MapPage = ({ sites }) => {
       }
     });
 
-    setSitesWithCoords(initial);
+    setSitesWithCoords(dedupeSitesByKey(initial));
 
     if (toGeocode.length === 0) return;
 
@@ -153,10 +154,15 @@ const MapPage = ({ sites }) => {
         })
       );
 
-      if (gen !== geocodeGeneration.current) return;
+      if (gen !== geocodeGeneration.current) {
+        setGeocoding(false);
+        return;
+      }
 
       const merged = geocodedResults.filter(Boolean);
-      setSitesWithCoords((prev) => [...prev, ...merged]);
+      // Single atomic update with captured `initial` — never append to stale `prev`
+      // (avoids duplicates when `sites` re-runs or overlapping async completions).
+      setSitesWithCoords(dedupeSitesByKey([...initial, ...merged]));
       setGeocoding(false);
     })();
   }, [sites]);
@@ -219,34 +225,43 @@ const MapPage = ({ sites }) => {
     return R * c;
   }, []);
 
-  // Filter and sort by search + distance (only sites that already have lat/lng)
-  useEffect(() => {
-    if (!sitesWithCoords.length) {
-      setFilteredSites([]);
-      return;
-    }
+  // Derive list once — avoids duplicate rows when viewState updates (map pan) retriggered effects
+  const filteredSites = useMemo(() => {
+    const deduped = dedupeSitesByKey(sitesWithCoords);
+    if (!deduped.length) return [];
 
-    const q = searchQuery.toLowerCase();
-    const filteredAndSortedSites = sitesWithCoords
-      .filter((site) => site.name && site.name.toLowerCase().includes(q))
-      .sort((a, b) => {
-        const distanceA = calculateDistance(
+    const q = searchQuery.trim().toLowerCase();
+    const matched = q
+      ? deduped.filter((site) => {
+          const name = (site.name || "").toLowerCase();
+          const city = (site.city || "").toLowerCase();
+          return name.includes(q) || city.includes(q);
+        })
+      : deduped;
+
+    return [...matched].sort((a, b) => {
+      return (
+        calculateDistance(
           viewState.latitude,
           viewState.longitude,
           a.lat,
           a.lng
-        );
-        const distanceB = calculateDistance(
+        ) -
+        calculateDistance(
           viewState.latitude,
           viewState.longitude,
           b.lat,
           b.lng
-        );
-        return distanceA - distanceB;
-      });
-
-    setFilteredSites(filteredAndSortedSites);
-  }, [searchQuery, sitesWithCoords, viewState, calculateDistance]);
+        )
+      );
+    });
+  }, [
+    sitesWithCoords,
+    searchQuery,
+    viewState.latitude,
+    viewState.longitude,
+    calculateDistance,
+  ]);
 
   // Markers: one per filtered site (all have lat/lng)
   useEffect(() => {
@@ -291,7 +306,7 @@ const MapPage = ({ sites }) => {
         )}
         {filteredSites.map((site) => (
           <SiteCard
-            key={site.id || site.name}
+            key={siteKey(site)}
             site={site}
             onClick={() => {
               setSelectedSite(site);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "../Data/Firebase";
@@ -8,13 +8,17 @@ import { SITE_TAGS } from "../Data/Constants";
 import PassportLogo from "../Images/nebraska_passport_2026_logo.png";
 import YourParksLogo from "../Images/your-parks-adventure-logo.png";
 import { isSpecial50Site } from "../Components/Special50Badge";
+import { siteKey, dedupeSitesByKey } from "../Data/siteUtils";
 
 function Sites({ sites }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFeatures, setSelectedFeatures] = useState([]);
   const [filterSpecial50, setFilterSpecial50] = useState(false);
 
-  const hasSpecial50Sites = sites.some((s) => isSpecial50Site(s));
+  const hasSpecial50Sites = useMemo(
+    () => sites.some((s) => isSpecial50Site(s)),
+    [sites]
+  );
 
   useEffect(() => {
     logEvent(analytics, "sites_visit");
@@ -30,21 +34,31 @@ function Sites({ sites }) {
     );
   };
 
-  // Filter sites based on search, features, and special50
-  const filteredSites = sites.filter((site) => {
-    const matchesSearch =
-      site.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      site.city.toLowerCase().includes(searchQuery.toLowerCase());
+  const uniqueSites = useMemo(() => dedupeSitesByKey(sites), [sites]);
 
-    const features = site.features || [];
-    const matchesFeatures =
-      selectedFeatures.length === 0 ||
-      selectedFeatures.every((feature) => features.includes(feature));
+  // Filter deduped list — keys use site id, not name (many sites can share a name)
+  const filteredSites = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return uniqueSites.filter((site) => {
+      const matchesSearch =
+        (site.name || "").toLowerCase().includes(q) ||
+        (site.city || "").toLowerCase().includes(q);
 
-    const matchesSpecial50 = !filterSpecial50 || isSpecial50Site(site);
+      const features = site.features || [];
+      const matchesFeatures =
+        selectedFeatures.length === 0 ||
+        selectedFeatures.every((feature) => features.includes(feature));
 
-    return matchesSearch && matchesFeatures && matchesSpecial50;
-  });
+      const matchesSpecial50 = !filterSpecial50 || isSpecial50Site(site);
+
+      return matchesSearch && matchesFeatures && matchesSpecial50;
+    });
+  }, [
+    uniqueSites,
+    searchQuery,
+    selectedFeatures,
+    filterSpecial50,
+  ]);
 
   return (
     <div className="min-h-screen bg-yellow-100">
@@ -118,7 +132,7 @@ function Sites({ sites }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredSites.length > 0 ? (
             filteredSites.map((site) => (
-              <div key={site.name} className="flex justify-center">
+              <div key={siteKey(site)} className="flex justify-center">
                 <SiteCard props={site} />
               </div>
             ))
