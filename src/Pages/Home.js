@@ -224,6 +224,24 @@ function Home({ sites, links }) {
           >
             Donate Now
           </a>
+          <div className="mt-6 bg-gray-200/85 text-gray-900 rounded-xl p-5 shadow-md">
+            <h3 className="text-2xl font-bold mb-2">
+              Business/Organization Sponsorship Opportunities
+            </h3>
+            <p className="text-base mb-4">
+              Sponsor WanderNebraska 2026 for just $50 to promote your
+              community, attract visitors, and have your website featured on
+              our site and new mobile app.
+            </p>
+            <a
+              href="https://www.nshsf.org/projects/wandernebraska/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-6 py-2 text-base font-bold bg-gray-700 hover:bg-gray-800 text-white rounded-lg transition"
+            >
+              Sponsor WanderNebraska
+            </a>
+          </div>
         </div>
       </section>
 
