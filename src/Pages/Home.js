@@ -7,6 +7,10 @@ import WanderDefaultImage from "../Images/WanderDefaultImage.png";
 import NSHSF from "../Images/NSHSFLogo.png";
 import Merch from "../Images/Merch.png";
 import PassportLogo from "../Images/nebraska_passport_2026_logo.png";
+import IOSDownload from "../Images/ios-download.png";
+import AndroidDownload from "../Images/android-download.png";
+import AppPromoOne from "../Images/app-promo-1.png";
+import AppPromoTwo from "../Images/app-promo-2.png";
 import { useNavigate } from "react-router-dom";
 import { isSpecial50Site, Special50Badge } from "../Components/Special50Badge";
 
@@ -62,8 +66,8 @@ function Home({ sites, links }) {
       </Helmet>
 
       {/* Booklet banner */}
-      <section className="bg-gray-600/70 text-white py-4 px-4 text-center shadow-md backdrop-blur-sm">
-        <p className="text-lg md:text-xl font-semibold mb-1">
+      <section className="bg-gray-600/70 text-white py-2 px-4 text-center shadow-md backdrop-blur-sm">
+        <p className="text-base md:text-lg font-semibold mb-1">
           Your 2026 Nebraska adventure starts here — order your WanderNebraska
           booklet now! Booklets ship mid-April.
         </p>
@@ -71,7 +75,7 @@ function Home({ sites, links }) {
           href="https://secure.qgiv.com/for/wandernebraska/event/wandernebraska2026booklet/"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block mt-1 px-4 py-2 bg-yellow-400 text-blue-900 font-bold rounded-lg hover:bg-yellow-300 transition"
+          className="inline-block mt-1 px-3 py-1.5 bg-yellow-400 text-blue-900 font-bold rounded-lg hover:bg-yellow-300 transition"
         >
           Get your booklet →
         </a>
@@ -82,14 +86,14 @@ function Home({ sites, links }) {
         <img
           src={ChimneyRock}
           alt="wanderNE"
-          className="w-full h-[500px] object-cover"
+          className="w-full h-[420px] object-cover"
         />
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="text-center px-4">
-            <h1 className="text-5xl md:text-6xl tracking-wide">
+            <h1 className="text-4xl md:text-5xl tracking-wide">
               WanderNebraska
             </h1>
-            <p className="mt-4 text-lg md:text-xl">
+            <p className="mt-2 text-base md:text-lg">
               A statewide travel adventure program.
             </p>
             <button
@@ -97,10 +101,94 @@ function Home({ sites, links }) {
                 navigate("/explore");
                 window.scrollTo(0, 0);
               }}
-              className="mt-6 px-6 py-3 text-lg font-bold bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-300 hover:from-yellow-400 hover:to-yellow-500 text-blue-900 rounded-lg shadow-lg hover:scale-105 transform transition duration-300"
+              className="mt-4 px-5 py-2.5 text-base font-bold bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-300 hover:from-yellow-400 hover:to-yellow-500 text-blue-900 rounded-lg shadow-lg hover:scale-105 transform transition duration-300"
             >
               Start Exploring!
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Mobile App Download + How It Works */}
+      <section className="relative py-14 text-white">
+        <img
+          src={LocationsBg}
+          alt="Map background"
+          className="w-full h-full object-cover absolute inset-0"
+        />
+        <div className="container mx-auto px-4">
+          <div className="relative max-w-6xl mx-auto rounded-2xl border border-gray-200 bg-white/80 p-6 md:p-8 shadow-xl">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-center text-blue-700">
+              Download the NEW WanderNebraska App!
+            </h2>
+            <p className="mt-3 text-gray-700 text-center max-w-3xl mx-auto">
+              Track your visits, discover historical gems, and make your 2026
+              WanderNebraska adventure even easier.
+            </p>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-3 items-center">
+              <div className="flex flex-col gap-4 items-center">
+                <a
+                  href="https://apps.apple.com/us/app/wandernebraska/id6760377408"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block hover:scale-110 hover:-translate-y-0.5 transition-transform duration-200"
+                  aria-label="Download WanderNebraska on the App Store"
+                >
+                  <img
+                    src={IOSDownload}
+                    alt="Download on the App Store"
+                    className="h-16 md:h-[72px] w-auto rounded-lg shadow-lg"
+                  />
+                </a>
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.wandernebraska.mobile"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block hover:scale-110 hover:-translate-y-0.5 transition-transform duration-200"
+                  aria-label="Get WanderNebraska on Google Play"
+                >
+                  <img
+                    src={AndroidDownload}
+                    alt="Get it on Google Play"
+                    className="h-16 md:h-[72px] w-auto rounded-lg shadow-lg"
+                  />
+                </a>
+              </div>
+              <img
+                src={AppPromoOne}
+                alt="WanderNebraska app sites view"
+                className="w-full max-w-[260px] justify-self-center rounded-xl border border-gray-200 shadow-lg"
+              />
+              <img
+                src={AppPromoTwo}
+                alt="WanderNebraska app profile view"
+                className="w-full max-w-[260px] justify-self-center rounded-xl border border-gray-200 shadow-lg"
+              />
+            </div>
+
+            <div className="mt-8">
+              <h3 className="text-2xl font-bold text-center text-gray-800">
+                How it works
+              </h3>
+              <div className="mt-4 grid gap-3 md:grid-cols-3">
+                <div className="bg-white border border-gray-200 rounded-lg p-4">
+                  <p className="text-gray-800">
+                    Download the app and create an account.
+                  </p>
+                </div>
+                <div className="bg-white border border-gray-200 rounded-lg p-4">
+                  <p className="text-gray-800">
+                    Visit a WanderNebraska site and log your visit in the app.
+                  </p>
+                </div>
+                <div className="bg-white border border-gray-200 rounded-lg p-4">
+                  <p className="text-gray-800">
+                    Or scan the QR code at the site to log your visit.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
