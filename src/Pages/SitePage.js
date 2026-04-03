@@ -5,6 +5,7 @@ import { logEvent } from "firebase/analytics";
 import { analytics } from "../Data/Firebase";
 import Loading from "../Components/Loading";
 import WanderNebraskaLogo from "../Images/WanderDefaultImage.png";
+import WanderDefaultImageTransparent from "../Images/WanderDefaultImageTransparent.png";
 import ErrorPage from "./ErrorPage";
 import { SITE_TAGS } from "../Data/Constants";
 import YourParksLogo from "../Images/your-parks-adventure-logo.png";
@@ -57,21 +58,31 @@ export default function SitePage({ sites }) {
 
         {isSpecial50Site(site) && (
           <div className="max-w-2xl mx-auto mb-8 rounded-xl border border-green-200 bg-green-50 p-4 text-left">
-            <img
-              src={YourParksLogo}
-              alt="Your Parks Adventure"
-              className="h-16 w-16 object-contain mb-3"
-            />
+            <div className="flex items-center gap-1.5 mb-3">
+              <img
+                src={YourParksLogo}
+                alt="Your Parks Adventure"
+                className="h-14 w-14 object-contain shrink-0"
+              />
+              <img
+                src={WanderDefaultImageTransparent}
+                alt="WanderNebraska"
+                className="h-14 w-auto max-w-[150px] object-contain object-left shrink-0"
+              />
+            </div>
             <p className="text-gray-800 text-base leading-relaxed mb-3">
               This site is one of the 50 designated Trail Trek & WanderNebraska
-              Special Sites. Celebrate Nebraska&apos;s history and natural
-              beauty!
+              Special Sites.
+            </p>
+            <p className="text-gray-800 text-base leading-relaxed mb-3">
+              To check in, find the Trail Trek sign, snap a selfie, then scan
+              the QR code to submit your photo and register your stop.
             </p>
             <a
               href="https://yourparksadventure.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline text-base"
+              className="text-blue-600 hover:underline text-base block"
             >
               Learn more at yourparksadventure.com
             </a>

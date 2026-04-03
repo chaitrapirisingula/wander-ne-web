@@ -6,19 +6,21 @@ export function isSpecial50Site(site) {
   return site.special50 === true || site.special50 === "TRUE";
 }
 
-/** Badge overlay on site images (same asset as wander-ne-mobile sites list). */
+/** Badge overlay on site images (Your Parks mark for Trail Trek special sites). */
 export function Special50Badge({ className = "", compact = false }) {
-  const outer = compact ? "w-7 h-7 bottom-0.5 right-0.5" : "w-9 h-9 bottom-1 right-1";
-  const inner = compact ? "w-6 h-6" : "w-8 h-8";
+  const outer = compact
+    ? "bottom-0.5 right-0.5 p-0.5 min-h-[24px] min-w-[24px]"
+    : "bottom-1 right-1 p-1 min-h-[32px] min-w-[32px]";
+  const logoSize = compact ? "w-4 h-4" : "w-6 h-6";
   return (
     <div
-      className={`absolute ${outer} rounded-full bg-white/95 p-0.5 flex items-center justify-center shadow-md z-10 ${className}`}
+      className={`absolute ${outer} rounded-full bg-white/95 flex flex-row items-center justify-center shadow-md z-10 ${className}`}
       title="Trail Trek & WanderNebraska Special Site"
     >
       <img
         src={YourParksLogo}
         alt=""
-        className={`${inner} object-contain`}
+        className={`${logoSize} object-contain`}
         aria-hidden
       />
     </div>
