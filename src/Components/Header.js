@@ -53,6 +53,19 @@ function Header({ links }) {
             </div>
             <div
               onClick={() => {
+                navigate("/events");
+                window.scrollTo(0, 0);
+              }}
+              className={
+                location.pathname === "/events"
+                  ? "cursor-pointer text-yellow-400"
+                  : "cursor-pointer hover:text-yellow-400 transition duration-300"
+              }
+            >
+              Events
+            </div>
+            <div
+              onClick={() => {
                 navigate("/map");
                 window.scrollTo(0, 0);
               }}
@@ -132,6 +145,16 @@ function Header({ links }) {
             className="cursor-pointer block py-2 px-4 hover:bg-blue-600 transition duration-300"
           >
             Explore
+          </div>
+          <div
+            onClick={() => {
+              navigate("/events");
+              window.scrollTo(0, 0);
+              setIsOpen(false);
+            }}
+            className="cursor-pointer block py-2 px-4 hover:bg-blue-600 transition duration-300"
+          >
+            Events
           </div>
           <div
             onClick={() => {
