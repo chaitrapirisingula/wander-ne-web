@@ -4,6 +4,9 @@ import { IoClose } from "react-icons/io5";
 import MapboxGL from "mapbox-gl";
 import WanderNebraskaLogo from "../Images/WanderDefaultImage.png";
 import SearchBar from "../Components/SearchBar";
+import ChamberSponsorHint from "../Components/ChamberSponsorHint";
+import { matchChamberSponsor } from "../Data/chamberSponsors";
+import { useChamberSponsors } from "../hooks/useChamberSponsors";
 import { isSpecial50Site, Special50Badge } from "../Components/Special50Badge";
 import { siteKey, dedupeSitesByKey } from "../Data/siteUtils";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -94,6 +97,7 @@ function resolveDirectCoordinates(site) {
 const MapPage = ({ sites }) => {
   const mapContainer = useRef(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const chamberSponsors = useChamberSponsors();
   /** Sites with resolved lat/lng (same pipeline as mobile: direct + geocoded). */
   const [sitesWithCoords, setSitesWithCoords] = useState([]);
   const [geocoding, setGeocoding] = useState(false);
@@ -226,6 +230,11 @@ const MapPage = ({ sites }) => {
   }, []);
 
   // Derive list once — avoids duplicate rows when viewState updates (map pan) retriggered effects
+  const chamberMatch = useMemo(
+    () => matchChamberSponsor(chamberSponsors, searchQuery),
+    [chamberSponsors, searchQuery]
+  );
+
   const filteredSites = useMemo(() => {
     const deduped = dedupeSitesByKey(sitesWithCoords);
     if (!deduped.length) return [];
@@ -298,6 +307,7 @@ const MapPage = ({ sites }) => {
       <div className="absolute top-0 left-0 w-1/3 h-screen overflow-y-auto shadow-lg p-4 bg-yellow-50/95">
         <div className="pb-4">
           <SearchBar setSearchQuery={setSearchQuery} />
+          <ChamberSponsorHint sponsor={chamberMatch} />
         </div>
         {!MAPBOX_TOKEN && (
           <p className="text-sm text-red-600 mb-2">

@@ -9,9 +9,13 @@ import PassportLogo from "../Images/nebraska_passport_2026_logo.png";
 import YourParksLogo from "../Images/your-parks-adventure-logo.png";
 import { isSpecial50Site } from "../Components/Special50Badge";
 import { siteKey, dedupeSitesByKey } from "../Data/siteUtils";
+import { matchChamberSponsor } from "../Data/chamberSponsors";
+import { useChamberSponsors } from "../hooks/useChamberSponsors";
+import ChamberSponsorHint from "../Components/ChamberSponsorHint";
 
 function Sites({ sites }) {
   const [searchQuery, setSearchQuery] = useState("");
+  const chamberSponsors = useChamberSponsors();
   const [selectedFeatures, setSelectedFeatures] = useState([]);
   const [filterSpecial50, setFilterSpecial50] = useState(false);
 
@@ -37,6 +41,11 @@ function Sites({ sites }) {
   const uniqueSites = useMemo(() => dedupeSitesByKey(sites), [sites]);
 
   // Filter deduped list — keys use site id, not name (many sites can share a name)
+  const chamberMatch = useMemo(
+    () => matchChamberSponsor(chamberSponsors, searchQuery),
+    [chamberSponsors, searchQuery]
+  );
+
   const filteredSites = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     return uniqueSites.filter((site) => {
@@ -74,6 +83,7 @@ function Sites({ sites }) {
 
         <div className="w-full">
           <SearchBar setSearchQuery={setSearchQuery} />
+          <ChamberSponsorHint sponsor={chamberMatch} />
         </div>
 
         {/* Special Sites filter — own row */}
