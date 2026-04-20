@@ -11,6 +11,7 @@ import IOSDownload from "../Images/ios-download.png";
 import AndroidDownload from "../Images/android-download.png";
 import AppPromoOne from "../Images/app-promo-1.png";
 import AppPromoTwo from "../Images/app-promo-2.png";
+import Nebraska250Logo from "../Images/nebraska_250_logo.png";
 import { useNavigate } from "react-router-dom";
 import { isSpecial50Site, Special50Badge } from "../Components/Special50Badge";
 
@@ -90,10 +91,19 @@ function Home({ sites, links }) {
         />
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="text-center px-4">
-            <h1 className="text-4xl md:text-5xl tracking-wide">
+            <div className="flex justify-center">
+              <div className="flex h-[4.5rem] w-40 shrink-0 items-center justify-center sm:h-20 sm:w-48 md:h-[5.75rem] md:w-56">
+                <img
+                  src={Nebraska250Logo}
+                  alt="Nebraska 250"
+                  className="h-full w-full object-contain object-center"
+                />
+              </div>
+            </div>
+            <h1 className="mt-4 text-4xl tracking-wide md:mt-5 md:text-5xl">
               WanderNebraska
             </h1>
-            <p className="mt-2 text-base md:text-lg">
+            <p className="mt-4 text-base md:text-lg">
               A statewide travel adventure program.
             </p>
             <button

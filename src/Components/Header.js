@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import WanderNebraskaLogo from "../Images/WanderNebraskaLogo.png";
 
+const WANDER_ADVENTURE_TOUR_URL =
+  "https://www.nshsf.org/wandernebraska-adventure-tours/";
+
 function Header({ links }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,7 +27,7 @@ function Header({ links }) {
           />
 
           {/* Navigation Links for Desktop */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex md:items-center md:space-x-8">
             <div
               onClick={() => {
                 navigate("/");
@@ -77,6 +80,15 @@ function Header({ links }) {
             >
               Map
             </div>
+            <a
+              href={WANDER_ADVENTURE_TOUR_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="WanderNebraska Adventure Tour"
+              className="cursor-pointer text-white hover:text-yellow-400 transition duration-300"
+            >
+              Tours
+            </a>
             <a
               href={links.donation}
               target="_blank"
@@ -166,6 +178,16 @@ function Header({ links }) {
           >
             Map
           </div>
+          <a
+            href={WANDER_ADVENTURE_TOUR_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="WanderNebraska Adventure Tour"
+            className="block py-2 px-4 hover:bg-blue-600 transition duration-300"
+            onClick={() => setIsOpen(false)}
+          >
+            Tours
+          </a>
           <a
             href={links.donation}
             target="_blank"
