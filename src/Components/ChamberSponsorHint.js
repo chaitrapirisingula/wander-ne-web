@@ -10,7 +10,7 @@ export default function ChamberSponsorHint({ sponsor }) {
   return (
     <div className="mt-3 w-full max-w-md mx-auto rounded-lg border-2 border-blue-600 bg-white/90 px-4 py-3 text-center shadow-sm">
       <p className="text-base text-gray-800 md:text-lg">
-        Chamber of Commerce sponsor:{" "}
+        Chamber of Commerce Sponsor:{" "}
         <a
           href={href}
           target="_blank"
