@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { logEvent } from "firebase/analytics";
@@ -10,6 +10,9 @@ import ErrorPage from "./ErrorPage";
 import { SITE_TAGS } from "../Data/Constants";
 import YourParksLogo from "../Images/your-parks-adventure-logo.png";
 import { isSpecial50Site, Special50Badge } from "../Components/Special50Badge";
+import ChamberSponsorHint from "../Components/ChamberSponsorHint";
+import { findChamberSponsorForCity } from "../Data/chamberSponsors";
+import { useChamberSponsors } from "../hooks/useChamberSponsors";
 
 export default function SitePage({ sites }) {
   const [loading, setLoading] = useState(true);
@@ -18,6 +21,12 @@ export default function SitePage({ sites }) {
 
   const location = useLocation();
   const routeParams = useParams();
+  const chamberSponsors = useChamberSponsors();
+
+  const chamberMatch = useMemo(
+    () => findChamberSponsorForCity(chamberSponsors, site?.city),
+    [chamberSponsors, site?.city]
+  );
 
   useEffect(() => {
     try {
@@ -55,6 +64,12 @@ export default function SitePage({ sites }) {
           <h1 className="text-4xl font-bold text-blue-700">{site.name}</h1>
           <p className="text-gray-600 text-lg mt-2">{site.region}</p>
         </div>
+
+        {chamberMatch && (
+          <div className="max-w-2xl mx-auto mb-6">
+            <ChamberSponsorHint sponsor={chamberMatch} />
+          </div>
+        )}
 
         {isSpecial50Site(site) && (
           <div className="max-w-2xl mx-auto mb-8 rounded-xl border border-green-200 bg-green-50 p-4 text-left">

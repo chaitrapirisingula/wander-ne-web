@@ -9,6 +9,7 @@ import { matchChamberSponsor } from "../Data/chamberSponsors";
 import { useChamberSponsors } from "../hooks/useChamberSponsors";
 import { isSpecial50Site, Special50Badge } from "../Components/Special50Badge";
 import { siteKey, dedupeSitesByKey } from "../Data/siteUtils";
+import { normalizeSearchable } from "../Data/searchUtils";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -239,11 +240,11 @@ const MapPage = ({ sites }) => {
     const deduped = dedupeSitesByKey(sitesWithCoords);
     if (!deduped.length) return [];
 
-    const q = searchQuery.trim().toLowerCase();
+    const q = normalizeSearchable(searchQuery.trim());
     const matched = q
       ? deduped.filter((site) => {
-          const name = (site.name || "").toLowerCase();
-          const city = (site.city || "").toLowerCase();
+          const name = normalizeSearchable(site.name);
+          const city = normalizeSearchable(site.city);
           return name.includes(q) || city.includes(q);
         })
       : deduped;

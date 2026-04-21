@@ -9,6 +9,7 @@ import PassportLogo from "../Images/nebraska_passport_2026_logo.png";
 import YourParksLogo from "../Images/your-parks-adventure-logo.png";
 import { isSpecial50Site } from "../Components/Special50Badge";
 import { siteKey, dedupeSitesByKey } from "../Data/siteUtils";
+import { normalizeSearchable } from "../Data/searchUtils";
 import { matchChamberSponsor } from "../Data/chamberSponsors";
 import { useChamberSponsors } from "../hooks/useChamberSponsors";
 import ChamberSponsorHint from "../Components/ChamberSponsorHint";
@@ -47,11 +48,12 @@ function Sites({ sites }) {
   );
 
   const filteredSites = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
+    const q = normalizeSearchable(searchQuery.trim());
     return uniqueSites.filter((site) => {
       const matchesSearch =
-        (site.name || "").toLowerCase().includes(q) ||
-        (site.city || "").toLowerCase().includes(q);
+        !q ||
+        normalizeSearchable(site.name).includes(q) ||
+        normalizeSearchable(site.city).includes(q);
 
       const features = site.features || [];
       const matchesFeatures =
