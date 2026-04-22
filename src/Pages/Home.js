@@ -82,6 +82,30 @@ function Home({ sites, links }) {
         </a>
       </section>
 
+      {/* Special shared events/tours banner */}
+      <section className="bg-yellow-50 border-b border-yellow-200">
+        <div className="container mx-auto px-4 py-5 max-w-5xl flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div className="text-center md:text-left">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-700/80">
+              Special Shared Events/Tours
+            </p>
+            <p className="mt-1 text-gray-800 font-semibold">
+              Walk to the Rock at Trails at Chimney Rock — May 23, 2026
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              navigate("/shared-events");
+              window.scrollTo(0, 0);
+            }}
+            className="mx-auto md:mx-0 inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2.5 text-white font-bold hover:bg-blue-500 transition shadow"
+          >
+            View all 6 dates
+          </button>
+        </div>
+      </section>
+
       {/* Hero Section */}
       <section className="relative bg-blue-500 text-white">
         <img

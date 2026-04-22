@@ -12,6 +12,7 @@ import Header from "./Components/Header";
 import Loading from "./Components/Loading";
 import MapPage from "./Pages/MapPage";
 import EventsPage from "./Pages/EventsPage";
+import SharedEventsToursPage from "./Pages/SharedEventsToursPage";
 import Merch from "./Images/Merch.png";
 
 function App() {
@@ -158,6 +159,10 @@ function App() {
             <Route path="/explore/:site" element={<SitePage sites={sites} />} />
             <Route path="/map" element={<MapPage sites={sites} />} />
             <Route path="/events" element={<EventsPage sites={sites} />} />
+            <Route
+              path="/shared-events"
+              element={<SharedEventsToursPage sites={sites} />}
+            />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </div>
