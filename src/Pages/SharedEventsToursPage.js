@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import WanderDefaultImage from "../Images/WanderDefaultImage.png";
 import { normalizeSearchable } from "../Data/searchUtils";
 
+const GUIDED_TOUR_DETAILS_URL =
+  "https://outdoornebraska.gov/about/press-events/events/your-parks-adventure/";
+
 const SHARED_EVENTS = [
   {
     id: "walk-to-the-rock",
@@ -109,11 +112,11 @@ export default function SharedEventsToursPage({ sites }) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
           {cards.map(({ ev, site }) => (
             <div
               key={ev.id}
-              className="rounded-2xl border border-yellow-200 bg-white shadow-md overflow-hidden flex flex-col"
+              className="h-full rounded-2xl border border-yellow-200 bg-white shadow-md overflow-hidden flex flex-col"
             >
               <div className="relative h-44 w-full bg-gray-100">
                 <SiteThumb site={site} />
@@ -146,25 +149,39 @@ export default function SharedEventsToursPage({ sites }) {
                   </p>
                 )}
 
-                <div className="mt-5 flex gap-3">
-                  {site ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        navigate(`/explore/${encodeURIComponent(site.name)}`, {
-                          state: site,
-                        });
-                        window.scrollTo(0, 0);
-                      }}
-                      className="flex-1 rounded-xl bg-blue-600 px-4 py-2.5 text-white font-bold hover:bg-blue-500 transition"
-                    >
-                      View listing
-                    </button>
-                  ) : (
-                    <div className="flex-1 rounded-xl bg-gray-100 px-4 py-2.5 text-gray-600 font-semibold text-center">
-                      No listing
-                    </div>
-                  )}
+                <div className="mt-auto pt-5">
+                  <div className="flex gap-3">
+                    {site ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigate(
+                            `/explore/${encodeURIComponent(site.name)}`,
+                            {
+                              state: site,
+                            }
+                          );
+                          window.scrollTo(0, 0);
+                        }}
+                        className="flex-1 rounded-xl bg-blue-600 px-4 py-2.5 text-white font-bold hover:bg-blue-500 transition"
+                      >
+                        View listing
+                      </button>
+                    ) : (
+                      <div className="flex-1 rounded-xl bg-gray-100 px-4 py-2.5 text-gray-600 font-semibold text-center">
+                        No listing
+                      </div>
+                    )}
+                  </div>
+
+                  <a
+                    href={GUIDED_TOUR_DETAILS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex w-full items-center justify-center rounded-xl border-2 border-blue-600 bg-white px-4 py-2.5 font-bold text-blue-700 hover:bg-blue-50 transition"
+                  >
+                    View Guided Tour Details
+                  </a>
                 </div>
               </div>
             </div>
