@@ -82,12 +82,12 @@ function Home({ sites, links }) {
         </a>
       </section>
 
-      {/* Special shared events/tours banner */}
+      {/* Trail Trek Special Tours banner */}
       <section className="bg-yellow-50 border-b border-yellow-200">
         <div className="container mx-auto px-4 py-5 max-w-5xl flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div className="text-center md:text-left">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-700/80">
-              Special Shared Events/Tours
+              Trail Trek Special Tours
             </p>
             <p className="mt-1 text-gray-800 font-semibold">
               Walk to the Rock at Trails at Chimney Rock — May 23, 2026

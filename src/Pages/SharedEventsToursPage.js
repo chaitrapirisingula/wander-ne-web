@@ -97,18 +97,17 @@ export default function SharedEventsToursPage({ sites }) {
     <div className="min-h-screen bg-yellow-100">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Special Shared Events/Tours | WanderNebraska</title>
+        <title>Trail Trek Special Tours | WanderNebraska</title>
       </Helmet>
 
       <div className="container mx-auto px-4 py-10 max-w-6xl">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-blue-700">
-            Special Shared Events/Tours
+            Trail Trek Special Tours
           </h1>
           <p className="mt-3 text-gray-700 max-w-3xl mx-auto">
             Join us at these highlighted shared events and tours across
-            Nebraska. Tap a card to view the WanderNebraska listing when
-            available.
+            Nebraska.
           </p>
         </div>
 
@@ -159,7 +158,7 @@ export default function SharedEventsToursPage({ sites }) {
                             `/explore/${encodeURIComponent(site.name)}`,
                             {
                               state: site,
-                            }
+                            },
                           );
                           window.scrollTo(0, 0);
                         }}
