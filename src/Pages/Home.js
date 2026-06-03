@@ -66,22 +66,6 @@ function Home({ sites, links }) {
         <title>WanderNebraska</title>
       </Helmet>
 
-      {/* Booklet banner */}
-      <section className="bg-gray-600/70 text-white py-2 px-4 text-center shadow-md backdrop-blur-sm">
-        <p className="text-base md:text-lg font-semibold mb-1">
-          Your 2026 Nebraska adventure starts here — order your WanderNebraska
-          booklet now! Booklets ship mid-April.
-        </p>
-        <a
-          href="https://secure.qgiv.com/for/wandernebraska/event/wandernebraska2026booklet/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block mt-1 px-3 py-1.5 bg-yellow-400 text-blue-900 font-bold rounded-lg hover:bg-yellow-300 transition"
-        >
-          Get your booklet →
-        </a>
-      </section>
-
       {/* Trail Trek Special Tours banner */}
       <section className="bg-yellow-50 border-b border-yellow-200">
         <div className="container mx-auto px-4 py-5 max-w-5xl flex flex-col md:flex-row md:items-center md:justify-between gap-3">
@@ -296,19 +280,9 @@ function Home({ sites, links }) {
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           Explore the WanderNebraska Booklet
         </h2>
-        <p className="text-xl md:text-2xl text-gray-800 max-w-2xl mb-4">
-          <a
-            href="https://secure.qgiv.com/for/wandernebraska/event/wandernebraska2026booklet/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 font-semibold hover:underline"
-          >
-            Order your 2026 booklet
-          </a>
-          {" — your guide to exploring Nebraska, mailed in mid-April!"}
-        </p>
         <p className="text-gray-600 max-w-2xl mb-6">
-          Flip through the digital booklet below
+          Your guide to exploring Nebraska — flip through the digital booklet
+          below.
         </p>
         <div className="flex justify-center items-center w-full">
           <iframe
